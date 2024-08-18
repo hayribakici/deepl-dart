@@ -25,6 +25,13 @@ class Language {
 class LanguagePair {
   LanguagePair();
 
+  factory LanguagePair.create(
+      GlossaryLanguage source, GlossaryLanguage target) {
+    return LanguagePair()
+      ..source = source
+      ..target = target;
+  }
+
   @JsonKey(name: 'source_lang', unknownEnumValue: GlossaryLanguage.unknown)
   GlossaryLanguage? source;
   @JsonKey(name: 'target_lang', unknownEnumValue: GlossaryLanguage.unknown)

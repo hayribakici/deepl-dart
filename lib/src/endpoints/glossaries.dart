@@ -25,15 +25,14 @@ class Glossaries extends DeepLEndpoint {
       required GlossaryFormat glossaryFormat}) async {
     var body = {
       'name': name,
-      'source_lang': languagePair.source,
-      'target_lang': languagePair.target,
+      'source_lang': languagePair.source?.name,
+      'target_lang': languagePair.target?.name,
       'entries': _buildEntriesValue(glossaryEntries, glossaryFormat),
       'entries_format': glossaryFormat.formatValue
     };
     return Glossary.fromJson(
         jsonDecode(await _api._post(_path, jsonEncode(body))));
   }
-
 
   /// Retrieves all glossaries the user has created
   Future<Iterable<Glossary>> list() async {
@@ -48,26 +47,25 @@ class Glossaries extends DeepLEndpoint {
     return Glossary.fromJson(jsonDecode(jsonString));
   }
 
-
   /// Retrieves the entries from [id].
   Future<Map<String, String>> getEntries(String id) async {
-    String responseString = await _api._get('$_path/$id/entries', headers: {'accept': 'text/tab-separated-values'});
+    String responseString = await _api._get('$_path/$id/entries',
+        headers: {'accept': 'text/tab-separated-values'});
     Map<String, String> entries = {};
-    
+
     try {
-      
       var entryLines = responseString.split('\n');
       // var split = entryLines.map((e) => e.split(GlossaryFormat.tsv.formatValue));
       // entries = { for (var item in split) item[0] : item[1] };
-      var parsed = CsvToListConverter(fieldDelimiter: GlossaryFormat.tsv.formatValue).convert(responseString);
-      entries = { for (var item in parsed) item.first : item[1] };
-    } catch(e) {
+      var parsed =
+          CsvToListConverter(fieldDelimiter: GlossaryFormat.tsv.formatValue)
+              .convert(responseString);
+      entries = {for (var item in parsed) item.first: item[1]};
+    } catch (e) {
       return Future.error('error');
     }
     return entries;
   }
-
-
 
   String _buildEntriesValue(
       Map<String, String> glossaryEntries, GlossaryFormat glossaryFormat) {
