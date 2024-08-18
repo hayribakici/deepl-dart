@@ -53,12 +53,14 @@ class Glossaries extends DeepLEndpoint {
   Future<Map<String, String>> getEntries(String id) async {
     String responseString = await _api._get('$_path/$id/entries', headers: {'accept': 'text/tab-separated-values'});
     Map<String, String> entries = {};
+    
     try {
       
       var entryLines = responseString.split('\n');
-      var split = entryLines.map((e) => e.split(GlossaryFormat.tsv.formatValue));
-      entries = { for (var item in split) item[0] : item[1] };
-      
+      // var split = entryLines.map((e) => e.split(GlossaryFormat.tsv.formatValue));
+      // entries = { for (var item in split) item[0] : item[1] };
+      var parsed = CsvToListConverter(fieldDelimiter: GlossaryFormat.tsv.formatValue).convert(responseString);
+      entries = { for (var item in parsed) item.first : item[1] };
     } catch(e) {
       return Future.error('error');
     }

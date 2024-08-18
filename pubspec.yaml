@@ -11,6 +11,7 @@ dependencies:
   # path: ^1.8.0
   http: ^1.2.0
   json_annotation: ^4.8.1
+  csv: ^6.0.0
   
 
 dev_dependencies:
@@ -20,4 +21,6 @@ dev_dependencies:
   json_serializable: ">=6.7.1 <7.0.0"
   envied: ^0.5.4+1
   envied_generator: ^0.5.4+1
-  http_interceptor: ^2.0.0-beta.8
+  
+  # http_interceptor: ^2.0.0-beta.8
+  # nock: ^1.2.3

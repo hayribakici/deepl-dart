@@ -1,0 +1,13 @@
+{
+    "glossaries": [
+      {
+        "glossary_id": "123",
+        "ready": true,
+        "name": "My Glossary",
+        "source_lang": "en",
+        "target_lang": "de",
+        "creation_time": "2021-08-03T14:16:18.329Z",
+        "entry_count": 1
+      }
+    ]
+  }

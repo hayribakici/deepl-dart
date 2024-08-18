@@ -10,7 +10,7 @@ abstract class DeepLApi {
   late Documents _documents;
   late Glossaries _glossary;
 
-  DeepLApi(String key, [http.BaseClient? client]) {
+  DeepLApi(String key, {http.BaseClient? client}) {
     _key = key;
     _client = client ?? http.Client();
 
@@ -23,9 +23,9 @@ abstract class DeepLApi {
         headers: _buildRequestHeader(headers)));
   }
 
-  Future<String> _post(
-      String path, String body, {Map<String, String>? headers}) async {
-   var response = await _client.post(Uri.parse('$endpoint/$path'),
+  Future<String> _post(String path, String body,
+      {Map<String, String>? headers}) async {
+    var response = await _client.post(Uri.parse('$endpoint/$path'),
         headers: _buildRequestHeader(headers), body: body);
     return _handleResponse(response);
   }
@@ -44,7 +44,7 @@ abstract class DeepLApi {
       headers = base;
     } else {
       headers.addAll(base);
-    }    
+    }
     return headers;
   }
 
@@ -55,15 +55,14 @@ abstract class DeepLApi {
 }
 
 class DeepLFreeApi extends DeepLApi {
-  DeepLFreeApi(super.key, [super.client]);
+  DeepLFreeApi(super.key, {super.client});
 
   @override
   String get endpoint => 'https://api-free.deepl.com/v$version';
 }
 
 class DeepLProApi extends DeepLApi {
-
-  DeepLProApi(super.key, [super.client]) {
+  DeepLProApi(super.key, {super.client}) {
     _glossary = Glossaries(this);
   }
 
