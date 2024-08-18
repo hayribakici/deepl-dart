@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:deepl_dart/deepl.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:http_interceptor/http/http_methods.dart';
+import 'package:http_interceptor/http_interceptor.dart';
 
 class DeepLMockApi extends DeepLApi {
   factory DeepLMockApi.create() {
-    // var httpClient = InterceptedClient.build(
-    // interceptors: [DeepLApiInterceptor()], client: MockClient());
+    var httpClient = InterceptedClient.build(
+    interceptors: [DeepLApiInterceptor()], client: MockClient());
     return DeepLMockApi("", client: MockClient(handleRequest));
   }
 
@@ -15,7 +17,11 @@ class DeepLMockApi extends DeepLApi {
 
   @override
   String get endpoint => 'test/data/v$version';
+
+  
 }
+
+typedef IntercepHandler = void Function(HttpMethod method, Uri url, Map<String, String>? headers, [String? body]);
 
 Future<http.Response> handleRequest(http.BaseRequest request) async {
   return createSuccessResponse(_readResponseContent(request.url));
@@ -36,21 +42,29 @@ http.Response createSuccessResponse([String body = ""]) {
 }
 
 
-// class DeepLApiInterceptor implements InterceptorContract {
-//   @override
-//   Future<BaseRequest> interceptRequest({required BaseRequest request}) async {
-//     return request;
-//   }
+class DeepLApiInterceptor implements InterceptorContract {
+  
+  final IntercepHandler? _handler;
 
-//   @override
-//   Future<BaseResponse> interceptResponse({required BaseResponse response}) {
-//     // TODO: implement interceptResponse
-//     throw UnimplementedError();
-//   }
+  DeepLApiInterceptor(this._handler);
+  
+  @override
+  Future<BaseRequest> interceptRequest({required BaseRequest request}) async {
+    if (_handler != null) {
+      _handler(HttpMethod.values.firstWhere((element) => element.name == request.method), request.url, request.headers);
+    }
+    return request;
+  }
 
-//   @override
-//   Future<bool> shouldInterceptRequest() async => true;
 
-//   @override
-//   Future<bool> shouldInterceptResponse() async => false;
-// }
+  @override
+  Future<BaseResponse> interceptResponse({required BaseResponse response}) async {
+    return response;
+  }
+
+  @override
+  Future<bool> shouldInterceptRequest() async => true;
+
+  @override
+  Future<bool> shouldInterceptResponse() async => false;
+}
