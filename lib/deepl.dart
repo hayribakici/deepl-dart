@@ -13,5 +13,5 @@ import 'dart:core';
 part 'src/deepl_api.dart';
 part 'src/endpoints/endpoint.dart';
 part 'src/endpoints/documents.dart';
-part 'src/endpoints/glossary.dart';
+part 'src/endpoints/glossaries.dart';
 

@@ -8,7 +8,7 @@ part of '_models.dart';
 @JsonSerializable()
 class Language {
   @JsonKey(name: 'language')
-  LanguageCode languageCode;
+  GlossaryLanguage languageCode;
   String name;
   @JsonKey(name: 'supports_formality')
   bool supportsFormality;
@@ -23,19 +23,15 @@ class Language {
 
 @JsonSerializable(createToJson: false)
 class LanguagePair {
-
-  static String _capitalize(Map<dynamic, dynamic> json, String key) {
-    return json[key].toUpperCase();
-  }
-
   LanguagePair();
 
-  @JsonKey(name: 'source_lang', unknownEnumValue: LanguageCode.unknown, readValue: _capitalize)
-  LanguageCode? source;
-  @JsonKey(name: 'target_lang', unknownEnumValue: LanguageCode.unknown, readValue: _capitalize)
-  LanguageCode? target;
+  @JsonKey(name: 'source_lang', unknownEnumValue: GlossaryLanguage.unknown)
+  GlossaryLanguage? source;
+  @JsonKey(name: 'target_lang', unknownEnumValue: GlossaryLanguage.unknown)
+  GlossaryLanguage? target;
 
-  factory LanguagePair.fromJson(Map<String, dynamic> json) => _$LanguagePairFromJson(json);
+  factory LanguagePair.fromJson(Map<String, dynamic> json) =>
+      _$LanguagePairFromJson(json);
 }
 
 // Copyright (c) 2019-2021, Denis Portnov. All rights reserved.
