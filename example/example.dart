@@ -1,8 +1,8 @@
 // Copyright (c) 2024, hayribakici. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
-import 'package:deepl_dart/deepl.dart';
-import 'package:deepl_dart/env/env.dart';
+import 'package:deepl/deepl.dart';
+import 'package:deepl/env/env.dart';
 
 void main() async {
 

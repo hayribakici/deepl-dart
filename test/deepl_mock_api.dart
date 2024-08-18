@@ -1,9 +1,8 @@
 import 'dart:io';
 
-import 'package:deepl_dart/deepl.dart';
+import 'package:deepl/deepl.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:http_interceptor/http_interceptor.dart';
 
 class DeepLMockApi extends DeepLApi {
 
@@ -22,14 +21,13 @@ late IntercepHandler? _handler;
 set interceptor(IntercepHandler value) => _handler = value;
 
 typedef IntercepHandler = void Function(
-    HttpMethod method, Uri url, Map<String, String>? headers,
+    String method, Uri url, Map<String, String>? headers,
     [String? body]);
 
 Future<http.Response> handleRequest(http.Request request) async {
   if (_handler != null) {
       _handler!(
-          HttpMethod.values
-              .firstWhere((element) => element.name == request.method),
+          request.method,
           request.url,
           request.headers,
           request.body);

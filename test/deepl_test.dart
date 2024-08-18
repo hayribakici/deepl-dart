@@ -1,6 +1,5 @@
-import 'package:deepl_dart/deepl.dart';
-import 'package:deepl_dart/src/models/_models.dart';
-import 'package:http_interceptor/http_interceptor.dart';
+import 'package:deepl/deepl.dart';
+import 'package:deepl/src/models/_models.dart';
 import 'package:test/test.dart';
 
 import 'deepl_mock_api.dart';
@@ -58,7 +57,7 @@ void main() {
 
   test('create entry', () async {
     interceptor = (method, url, headers, [body]) {
-      expect(method, HttpMethod.POST);
+      expect(method, 'POST');
       expect(body, isNotNull);
       expect(body,
           "{\"name\":\"name\",\"source_lang\":\"de\",\"target_lang\":\"en\",\"entries\":\"Hallo,Hello\",\"entries_format\":\",\"}");

@@ -6,7 +6,7 @@ library deepl;
 import 'dart:convert';
 
 import 'package:csv/csv.dart';
-import 'package:deepl_dart/src/models/_models.dart';
+import 'package:deepl/src/models/_models.dart';
 import 'package:http/http.dart' as http;
 import 'dart:core';
 
