@@ -7,7 +7,7 @@ class Translations extends DeepLEndpoint {
 
   Translations(super.api);
 
-  Future<Translation> translate() async {
+  Future<Translation> translate(String text, {required TargetLanguage target, SourceLanguage? source}) async {
     return Translation();
   }
   
