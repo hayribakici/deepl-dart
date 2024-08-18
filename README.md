@@ -1,2 +1,5 @@
-A sample command-line application with an entrypoint in `bin/`, library code
-in `lib/`, and example unit test in `test/`.
+# deepl-dart
+
+This is a library that wraps the [DeepL API](https://developers.deepl.com/docs).
+
+==It is currently work in progress.==
