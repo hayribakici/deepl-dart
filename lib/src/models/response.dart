@@ -1,14 +1,9 @@
-
 part of '_models.dart';
 
-class Response {
-
-}
+class Response {}
 
 @JsonSerializable(createToJson: false)
-class TranslationResponse extends Response { 
-
+class TranslationResponse extends Response {
   @JsonKey(name: 'translations')
   List<Translation>? translations;
-
 }

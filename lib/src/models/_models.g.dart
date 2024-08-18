@@ -75,6 +75,7 @@ const _$LanguageCodeEnumMap = {
   LanguageCode.CX: 'CX',
   LanguageCode.CY: 'CY',
   LanguageCode.CZ: 'CZ',
+  LanguageCode.DA: 'DA',
   LanguageCode.DE: 'DE',
   LanguageCode.DJ: 'DJ',
   LanguageCode.DK: 'DK',
@@ -85,6 +86,7 @@ const _$LanguageCodeEnumMap = {
   LanguageCode.EE: 'EE',
   LanguageCode.EG: 'EG',
   LanguageCode.EH: 'EH',
+  LanguageCode.EN: 'EN',
   LanguageCode.ER: 'ER',
   LanguageCode.ES: 'ES',
   LanguageCode.ET: 'ET',
@@ -129,6 +131,7 @@ const _$LanguageCodeEnumMap = {
   LanguageCode.IR: 'IR',
   LanguageCode.IS: 'IS',
   LanguageCode.IT: 'IT',
+  LanguageCode.JA: 'JA',
   LanguageCode.JE: 'JE',
   LanguageCode.JM: 'JM',
   LanguageCode.JO: 'JO',
@@ -139,6 +142,7 @@ const _$LanguageCodeEnumMap = {
   LanguageCode.KI: 'KI',
   LanguageCode.KM: 'KM',
   LanguageCode.KN: 'KN',
+  LanguageCode.KO: 'KO',
   LanguageCode.KP: 'KP',
   LanguageCode.KR: 'KR',
   LanguageCode.KW: 'KW',
@@ -179,6 +183,7 @@ const _$LanguageCodeEnumMap = {
   LanguageCode.MY: 'MY',
   LanguageCode.MZ: 'MZ',
   LanguageCode.NA: 'NA',
+  LanguageCode.NB: 'NB',
   LanguageCode.NC: 'NC',
   LanguageCode.NE: 'NE',
   LanguageCode.NF: 'NF',
@@ -267,15 +272,18 @@ const _$LanguageCodeEnumMap = {
   LanguageCode.YE: 'YE',
   LanguageCode.YT: 'YT',
   LanguageCode.ZA: 'ZA',
+  LanguageCode.ZH: 'ZH',
   LanguageCode.ZM: 'ZM',
   LanguageCode.ZW: 'ZW',
   LanguageCode.unknown: 'unknown',
 };
 
 LanguagePair _$LanguagePairFromJson(Map<String, dynamic> json) => LanguagePair()
-  ..source = $enumDecodeNullable(_$LanguageCodeEnumMap, json['source_lang'],
+  ..source = $enumDecodeNullable(
+      _$LanguageCodeEnumMap, LanguagePair._capitalize(json, 'source_lang'),
       unknownValue: LanguageCode.unknown)
-  ..target = $enumDecodeNullable(_$LanguageCodeEnumMap, json['target_lang'],
+  ..target = $enumDecodeNullable(
+      _$LanguageCodeEnumMap, LanguagePair._capitalize(json, 'target_lang'),
       unknownValue: LanguageCode.unknown);
 
 Quota _$QuotaFromJson(Map<String, dynamic> json) => Quota()
@@ -294,4 +302,7 @@ TranslationResponse _$TranslationResponseFromJson(Map<String, dynamic> json) =>
           ?.map((e) => Translation.fromJson(e as Map<String, dynamic>))
           .toList();
 
-Glossary _$GlossaryFromJson(Map<String, dynamic> json) => Glossary();
+Glossaries _$GlossariesFromJson(Map<String, dynamic> json) => Glossaries()
+  ..supportedLanguages = (json['supported_languages'] as List<dynamic>?)
+      ?.map((e) => LanguagePair.fromJson(e as Map<String, dynamic>))
+      .toList();

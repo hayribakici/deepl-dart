@@ -3,6 +3,9 @@
 
 library deepl;
 
+import 'dart:convert';
+
+import 'package:deepl_dart/env/env.dart';
 import 'package:deepl_dart/src/models/_models.dart';
 import 'package:http/http.dart' as http;
 import 'dart:core';

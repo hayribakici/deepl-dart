@@ -5,29 +5,37 @@
 
 part of '_models.dart';
 
-
-
 @JsonSerializable()
 class Language {
-  
   @JsonKey(name: 'language')
   LanguageCode languageCode;
   String name;
   @JsonKey(name: 'supports_formality')
   bool supportsFormality;
 
-  Language({required this.languageCode, required this.name, this.supportsFormality = false});
+  Language(
+      {required this.languageCode,
+      required this.name,
+      this.supportsFormality = false});
 
   Map<String, dynamic> toJson() => _$LanguageToJson(this);
-
 }
 
 @JsonSerializable(createToJson: false)
 class LanguagePair {
-  @JsonKey(name: 'source_lang', unknownEnumValue: LanguageCode.unknown)
+
+  static String _capitalize(Map<dynamic, dynamic> json, String key) {
+    return json[key].toUpperCase();
+  }
+
+  LanguagePair();
+
+  @JsonKey(name: 'source_lang', unknownEnumValue: LanguageCode.unknown, readValue: _capitalize)
   LanguageCode? source;
-  @JsonKey(name: 'target_lang', unknownEnumValue: LanguageCode.unknown)
+  @JsonKey(name: 'target_lang', unknownEnumValue: LanguageCode.unknown, readValue: _capitalize)
   LanguageCode? target;
+
+  factory LanguagePair.fromJson(Map<String, dynamic> json) => _$LanguagePairFromJson(json);
 }
 
 // Copyright (c) 2019-2021, Denis Portnov. All rights reserved.
@@ -88,6 +96,7 @@ enum LanguageCode {
   CX,
   CY,
   CZ,
+  DA, // Danish
   DE,
   DJ,
   DK,
@@ -98,6 +107,7 @@ enum LanguageCode {
   EE,
   EG,
   EH,
+  EN, // English
   ER,
   ES,
   ET,
@@ -142,16 +152,18 @@ enum LanguageCode {
   IR,
   IS,
   IT,
+  JA, // Japanese
   JE,
   JM,
   JO,
-  JP,
+  JP, // Japanese
   KE,
   KG,
   KH,
   KI,
   KM,
   KN,
+  KO, // Korean
   KP,
   KR,
   KW,
@@ -192,6 +204,7 @@ enum LanguageCode {
   MY,
   MZ,
   NA,
+  NB, // (Norwegian Bokmål)
   NC,
   NE,
   NF,
@@ -280,6 +293,7 @@ enum LanguageCode {
   YE,
   YT,
   ZA,
+  ZH, // Chinese
   ZM,
   ZW,
   unknown
