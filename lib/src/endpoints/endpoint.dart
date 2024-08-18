@@ -3,9 +3,10 @@
 
 part of '../../deepl.dart';
 
-class DeepLEndpoint {
-
-  late String _path;
+abstract class DeepLEndpoint {
+  // ignore: unused_element
+  String get _path;
+  
   final DeepLApi _api;
   
   DeepLEndpoint(this._api);

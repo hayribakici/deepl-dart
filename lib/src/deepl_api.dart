@@ -8,6 +8,7 @@ abstract class DeepLApi {
   late String _key;
   late http.Client _client;
   late Documents _documents;
+  late Translations _translations;
   late Glossaries _glossary;
 
   DeepLApi(String key, {http.BaseClient? client}) {
@@ -16,6 +17,7 @@ abstract class DeepLApi {
 
     _documents = Documents(this);
     _glossary = Glossaries(this);
+    _translations = Translations(this);
   }
 
   Future<String> _get(String path, {Map<String, String>? headers}) async {
@@ -52,6 +54,7 @@ abstract class DeepLApi {
 
   Documents get documents => _documents;
   Glossaries get glossary => _glossary;
+  Translations get translations => _translations;
 }
 
 class DeepLFreeApi extends DeepLApi {
