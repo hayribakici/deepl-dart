@@ -11,8 +11,8 @@ class Translation {
       _$TranslationFromJson(json);
 
   @JsonKey(
-      name: 'detected_source_language', unknownEnumValue: LanguageCode.unknown)
-  LanguageCode? detectedLanguage;
+      name: 'detected_source_language', unknownEnumValue: SourceLanguage.unknown)
+  SourceLanguage? detectedLanguage;
 
   @JsonKey(name: 'text')
   String? text;

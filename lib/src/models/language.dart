@@ -70,7 +70,8 @@ enum SourceLanguage {
   SV,
   TR,
   UK,
-  ZH
+  ZH,
+  unknown
 }
 
 enum TargetLanguage {
@@ -107,7 +108,8 @@ enum TargetLanguage {
   UK,
   ZH,
   ZH_HANS,
-  ZH_HANT
+  ZH_HANT,
+  unknown
 }
 
 // Copyright (c) 2019-2021, Denis Portnov. All rights reserved.
