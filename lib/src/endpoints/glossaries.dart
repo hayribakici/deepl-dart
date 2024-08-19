@@ -11,7 +11,7 @@ class Glossaries extends DeepLEndpoint {
 
   /// Retrieves all supported [LanguagePair]s.
   Future<Iterable<LanguagePair>> supportedLanguagePairs() async {
-    String jsonString = await _api._get('glossary-language-pairs');
+    String jsonString = await _get('glossary-language-pairs');
     var tJson =
         jsonDecode(jsonString)['supported_languages'] as Iterable<dynamic>;
     return tJson.map((json) => LanguagePair.fromJson(json));
@@ -31,25 +31,26 @@ class Glossaries extends DeepLEndpoint {
       'entries_format': glossaryFormat.formatValue
     };
     return Glossary.fromJson(
-        jsonDecode(await _api._post(_path, jsonEncode(body))));
+        jsonDecode(await _post(_path, jsonEncode(body))));
   }
 
   /// Retrieves all glossaries the user has created
   Future<Iterable<Glossary>> list() async {
-    String jsonString = await _api._get(_path);
+    String jsonString = await _get(_path);
     var tJson = jsonDecode(jsonString)['glossaries'] as Iterable<dynamic>;
     return tJson.map((json) => Glossary.fromJson(json));
   }
 
   /// Retrieves the glossary through its [id].
   Future<Glossary> get(String id) async {
-    String jsonString = await _api._get('$_path/$id');
+    String jsonString = await _get('$_path/$id');
     return Glossary.fromJson(jsonDecode(jsonString));
   }
 
   /// Retrieves the entries from [id].
+  // FIXME
   Future<Map<String, String>> getEntries(String id) async {
-    String responseString = await _api._get('$_path/$id/entries',
+    String responseString = await _get('$_path/$id/entries',
         headers: {'accept': 'text/tab-separated-values'});
     Map<String, String> entries = {};
 

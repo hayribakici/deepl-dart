@@ -12,3 +12,4 @@ part 'quota.dart';
 part 'translation.dart';
 part 'response.dart';
 part 'glossary.dart';
+part 'document.dart';
