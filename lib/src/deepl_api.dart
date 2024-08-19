@@ -32,6 +32,16 @@ abstract class DeepLApi {
     return _handleResponse(response);
   }
 
+  Future<String> _postFormData(String path, File file) {
+    FormData data = FormData();
+    // HttpRequest request = HttpRequestUpload('POST', Uri.parse('$endpoint/$path'), )..
+    // _client.send(request)
+    // HttpRequest.request('/upload', method: 'POST', sendData: data).then((HttpRequest r) {
+      // HttpRequestUpload
+  // ...
+// });
+  }
+
   Future<String> _handleResponse(http.Response response) async {
     // (await response).
     return utf8.decode(response.bodyBytes);
@@ -39,8 +49,8 @@ abstract class DeepLApi {
 
   Map<String, String> _buildRequestHeader(Map<String, String>? headers) {
     var base = {
-      'Authorization': 'DeepL-Auth-Key $_key',
-      'Content-Type': 'application/json'
+      HttpHeaders.authorizationHeader: 'DeepL-Auth-Key $_key',
+      HttpHeaders.contentTypeHeader: ContentType.json.mimeType
     };
     if (headers == null) {
       headers = base;
