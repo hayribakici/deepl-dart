@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 import 'deepl_mock_api.dart';
 
 void main() {
-  late DeepLMockApi deepl;
+  late DeepLApi deepl;
 
   setUp(() {
     deepl = DeepLMockApi.create();
