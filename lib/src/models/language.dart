@@ -19,6 +19,8 @@ class Language {
       this.supportsFormality = false});
 
   Map<String, dynamic> toJson() => _$LanguageToJson(this);
+
+  factory Language.fromJson(Map<String, dynamic> json) => _$LanguageFromJson(json);
 }
 
 @JsonSerializable(createToJson: false)

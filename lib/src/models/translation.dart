@@ -42,6 +42,8 @@ class TranslateRequestOptions {
 
   Map<String, dynamic> toJson() => _$TranslateRequestOptionsToJson(this);
 
+  factory TranslateRequestOptions.fromJson(Map<String, dynamic> json) => _$TranslateRequestOptionsFromJson(json);
+
   TranslateRequestOptions._builder(TranslateRequestOptionsBuilder builder) {
     source = builder.source;
     context = builder.context;

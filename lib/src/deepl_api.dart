@@ -32,6 +32,7 @@ abstract class DeepLApi {
     return _handleResponse(response);
   }
 
+  // ignore: unused_element
   Future<String> _postFormData(String urlPath, String filename) async {
     http.MultipartRequest request =
         http.MultipartRequest('POST', Uri.parse('$endpoint/$urlPath'));
@@ -45,7 +46,7 @@ abstract class DeepLApi {
     // HttpRequestUpload
     // ...
 // });
-    var response = await request.send();
+    // var response = await request.send();
     // return _handleResponse(response);
     return '';
   }
