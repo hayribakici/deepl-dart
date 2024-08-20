@@ -18,7 +18,7 @@ class DeepLMockApi extends DeepLApi {
 }
 
 IntercepHandler? _handler;
-set interceptor(IntercepHandler value) => _handler = value;
+set interceptor(IntercepHandler? value) => _handler = value;
 
 typedef IntercepHandler = void Function(
     String method, Uri url, Map<String, String>? headers,

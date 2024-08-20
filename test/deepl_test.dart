@@ -5,11 +5,13 @@ import 'package:test/test.dart';
 import 'deepl_mock_api.dart';
 
 void main() {
-  late DeepLApi deepl;
+  late DeepLMockApi deepl;
 
   setUp(() {
     deepl = DeepLMockApi.create();
   });
+
+  tearDown(() => interceptor = null);
 
   group('glossary', () {
     test('supported language types', () async {
