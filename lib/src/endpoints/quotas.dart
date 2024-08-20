@@ -9,5 +9,6 @@ class Quotas extends DeepLEndpoint {
 
   Quotas(super.api);
 
+  /// Retrieve the usage of the API
   Future<Quota> get() async => _handleGet(_path, fromJson: Quota.fromJson);
 }

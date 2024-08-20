@@ -9,7 +9,7 @@ class Glossaries extends DeepLEndpoint {
 
   Glossaries(super.api);
 
-  /// Retrieves all supported [LanguagePair]s.
+  /// Retrieve the list of [LanguagePair]s supported by the glossary feature.
   Future<Iterable<LanguagePair>> supportedLanguagePairs() async =>
       _handleList('glossary-language-pairs', jsonKey: 'supported_languages',
           fromJson: LanguagePair.fromJson);
@@ -30,11 +30,11 @@ class Glossaries extends DeepLEndpoint {
     return Glossary.fromJson(jsonDecode(await _post(_path, jsonEncode(body))));
   }
 
-  /// Retrieves all glossaries the user has created
+  /// List all glossaries and their meta-information, without the glossary entries.
   Future<Iterable<Glossary>> list() async =>
       _handleList(_path, jsonKey: 'glossaries', fromJson: Glossary.fromJson);
 
-  /// Retrieves the glossary through its [id].
+  /// Retrieves the glossary through its [id], without the glossary entries
   Future<Glossary> get(String id) async =>
       _handleGet('$_path/$id', fromJson: Glossary.fromJson);
 

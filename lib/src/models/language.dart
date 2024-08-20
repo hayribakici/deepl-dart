@@ -5,6 +5,7 @@
 
 part of '_models.dart';
 
+/// Model class that represents the Language API.
 @JsonSerializable()
 class Language {
   @JsonKey(name: 'language')

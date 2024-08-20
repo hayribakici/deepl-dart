@@ -4,15 +4,11 @@
 part of '../../deepl.dart';
 
 class Languages extends DeepLEndpoint {
-
-
-  
   @override
   String get _path => '/languages';
 
   Languages(super.api);
 
-  Future<Iterable<Language>> supportedLanguages() async => _handleList(_path, fromJson: Language.fromJson); 
-  
-
+  Future<Iterable<Language>> supportedLanguages() async =>
+      _handleList(_path, fromJson: Language.fromJson);
 }

@@ -3,6 +3,7 @@
 
 part of '../../deepl.dart';
 
+/// Base class for an API endpoint
 abstract class DeepLEndpoint {
   // ignore: unused_element
   String get _path;

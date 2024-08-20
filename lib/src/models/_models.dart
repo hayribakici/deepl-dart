@@ -3,6 +3,7 @@
 
 library deepl.models;
 
+import 'package:deepl/deepl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part '_models.g.dart';

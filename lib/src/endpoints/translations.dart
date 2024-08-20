@@ -3,13 +3,16 @@
 
 part of '../../deepl.dart';
 
+/// Endpoint for calling the translation API
 class Translations extends DeepLEndpoint {
   @override
   String get _path => 'translate';
 
   Translations(super.api);
 
-  /// Translates text
+  /// Translates [text] with a given [target] language and [options].
+  /// 
+  /// Build [options] with the [TranslateRequestOptionsBuilder].
   Future<Iterable<Translation>> translateText(String text,
       {required TargetLanguage target,
       TranslateRequestOptions? options}) async {
@@ -20,7 +23,7 @@ class Translations extends DeepLEndpoint {
 
 
   Future<DocumentStatus> translateDocument() async {
-    var document = await _api.documents.uploadDocument();
+    var document = await _api.documents.uploadDocument("");
     return _api.documents.status(document.documentId, document.documentKey);
   }
 

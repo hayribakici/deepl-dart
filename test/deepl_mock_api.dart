@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
 class DeepLMockApi extends DeepLApi {
-
   factory DeepLMockApi.create() {
     return DeepLMockApi("", client: MockClient(handleRequest));
   }
@@ -14,7 +13,6 @@ class DeepLMockApi extends DeepLApi {
 
   @override
   String get endpoint => 'test/data/v$version';
-
 }
 
 IntercepHandler? _handler;
@@ -26,11 +24,7 @@ typedef IntercepHandler = void Function(
 
 Future<http.Response> handleRequest(http.Request request) async {
   if (_handler != null) {
-      _handler!(
-          request.method,
-          request.url,
-          request.headers,
-          request.body);
+    _handler!(request.method, request.url, request.headers, request.body);
   }
   return createSuccessResponse(_readResponseContent(request.url));
 }

@@ -18,8 +18,9 @@ class Translation {
   String? text;
 }
 
+/// Options for calling [Translations.translateText].
 @JsonSerializable()
-class TranslateRequestOptions {
+final class TranslateRequestOptions {
 
   TranslateRequestOptions();
 
@@ -53,6 +54,7 @@ class TranslateRequestOptions {
   }
 }
 
+/// Builder class for [TranslateRequestOptions]
 final class TranslateRequestOptionsBuilder {
   SourceLanguage? source;
   String? context;
@@ -65,22 +67,23 @@ final class TranslateRequestOptionsBuilder {
   TranslateRequestOptions build() => TranslateRequestOptions._builder(this);
 }
 
-/// Sets whether the translation engine should first split
-/// the input into sentences.Sets whether the translation
-/// engine should first split the input into sentences.
+/// Options whether to first split the input into sentences.
 enum SplitSentenceOption {
-  /// no splitting at all, whole input is treated as one sentence
+  /// No splitting at all.
+  /// 
+  /// The whole input is treated as one sentence
   keep,
 
-  /// nonewlines (default when tag_handling=html) - splits on punctuation only, ignoring newlines
+  /// Splitting punctuation only, ignoring newlines (default when tag_handling=html)
   punctuation,
 
-  /// (default when tag_handling is not set to html) - splits on punctuation and on newlines
+  /// Splitting punctuation and newlines (default when tag_handling is not set to html)
   all
 }
 
+/// 
 enum Formality {
-  /// default
+  /// Default formality
   def(apiName: 'default'),
 
   /// more

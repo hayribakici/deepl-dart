@@ -141,15 +141,15 @@ Glossary _$GlossaryFromJson(Map<String, dynamic> json) => Glossary()
 DocumentStatus _$DocumentStatusFromJson(Map<String, dynamic> json) =>
     DocumentStatus()
       ..documentId = json['document_id'] as String?
-      ..status = $enumDecodeNullable(_$StatusEnumMap, json['status'])
+      ..translationStatus = $enumDecodeNullable(_$StatusEnumMap, json['status'])
       ..billedCharacters = json['billed_characters'] as int?
       ..errorMessage = json['error_message'] as String?;
 
 const _$StatusEnumMap = {
-  Status.queued: 'queued',
-  Status.translating: 'translating',
-  Status.done: 'done',
-  Status.error: 'error',
+  TranslationStatus.queued: 'queued',
+  TranslationStatus.translating: 'translating',
+  TranslationStatus.done: 'done',
+  TranslationStatus.error: 'error',
 };
 
 Document _$DocumentFromJson(Map<String, dynamic> json) => Document(

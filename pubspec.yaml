@@ -1,6 +1,6 @@
 name: deepl
 description:  An inofficial dart library that calls the DeepL API
-version: 0.0.1
+version: 0.0.1-alpha
 repository: https://github.com/hayribakici/deepl-dart
 
 environment:

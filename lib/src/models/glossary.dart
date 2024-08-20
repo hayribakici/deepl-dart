@@ -3,17 +3,23 @@
 
 part of '_models.dart';
 
-/// 
+/// Model class for the glossary API.
 @JsonSerializable(createToJson: false)
 class Glossary {
 
   Glossary();
 
+  /// A unique ID assigned to the glossary.
   @JsonKey(name: 'glossary_id')
   String? id;
 
+  /// Name of the glossary.
   String? name;
 
+  /// Whether the newly created glossary can already be used in [Translations.translateText] requests. 
+  /// 
+  /// If the created glossary is not yet ready, you have to wait and check the ready status 
+  /// of the glossary before using it in a [Translations.translateText] request.
   bool? ready;
 
   @JsonKey(name: 'source_lang')
