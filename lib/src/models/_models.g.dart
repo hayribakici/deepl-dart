@@ -7,52 +7,16 @@ part of '_models.dart';
 // **************************************************************************
 
 Language _$LanguageFromJson(Map<String, dynamic> json) => Language(
-      languageCode: $enumDecode(_$GlossaryLanguageEnumMap, json['language']),
+      languageCode: $enumDecode(_$SourceLanguageEnumMap, json['language']),
       name: json['name'] as String,
       supportsFormality: json['supports_formality'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$LanguageToJson(Language instance) => <String, dynamic>{
-      'language': _$GlossaryLanguageEnumMap[instance.languageCode]!,
+      'language': _$SourceLanguageEnumMap[instance.languageCode]!,
       'name': instance.name,
       'supports_formality': instance.supportsFormality,
     };
-
-const _$GlossaryLanguageEnumMap = {
-  GlossaryLanguage.da: 'da',
-  GlossaryLanguage.de: 'de',
-  GlossaryLanguage.en: 'en',
-  GlossaryLanguage.es: 'es',
-  GlossaryLanguage.fr: 'fr',
-  GlossaryLanguage.it: 'it',
-  GlossaryLanguage.ja: 'ja',
-  GlossaryLanguage.ko: 'ko',
-  GlossaryLanguage.nb: 'nb',
-  GlossaryLanguage.nl: 'nl',
-  GlossaryLanguage.pl: 'pl',
-  GlossaryLanguage.pt: 'pt',
-  GlossaryLanguage.ro: 'ro',
-  GlossaryLanguage.ru: 'ru',
-  GlossaryLanguage.sv: 'sv',
-  GlossaryLanguage.zh: 'zh',
-  GlossaryLanguage.unknown: 'unknown',
-};
-
-LanguagePair _$LanguagePairFromJson(Map<String, dynamic> json) => LanguagePair()
-  ..source = $enumDecodeNullable(_$GlossaryLanguageEnumMap, json['source_lang'],
-      unknownValue: GlossaryLanguage.unknown)
-  ..target = $enumDecodeNullable(_$GlossaryLanguageEnumMap, json['target_lang'],
-      unknownValue: GlossaryLanguage.unknown);
-
-Quota _$QuotaFromJson(Map<String, dynamic> json) => Quota()
-  ..characterCount = json['character_count'] as int? ?? 0
-  ..characterLimit = json['character_limit'] as int? ?? 0;
-
-Translation _$TranslationFromJson(Map<String, dynamic> json) => Translation()
-  ..detectedLanguage = $enumDecodeNullable(
-      _$SourceLanguageEnumMap, json['detected_source_language'],
-      unknownValue: SourceLanguage.unknown)
-  ..text = json['text'] as String?;
 
 const _$SourceLanguageEnumMap = {
   SourceLanguage.BG: 'BG',
@@ -86,6 +50,42 @@ const _$SourceLanguageEnumMap = {
   SourceLanguage.ZH: 'ZH',
   SourceLanguage.unknown: 'unknown',
 };
+
+LanguagePair _$LanguagePairFromJson(Map<String, dynamic> json) => LanguagePair()
+  ..source = $enumDecodeNullable(_$GlossaryLanguageEnumMap, json['source_lang'],
+      unknownValue: GlossaryLanguage.unknown)
+  ..target = $enumDecodeNullable(_$GlossaryLanguageEnumMap, json['target_lang'],
+      unknownValue: GlossaryLanguage.unknown);
+
+const _$GlossaryLanguageEnumMap = {
+  GlossaryLanguage.da: 'da',
+  GlossaryLanguage.de: 'de',
+  GlossaryLanguage.en: 'en',
+  GlossaryLanguage.es: 'es',
+  GlossaryLanguage.fr: 'fr',
+  GlossaryLanguage.it: 'it',
+  GlossaryLanguage.ja: 'ja',
+  GlossaryLanguage.ko: 'ko',
+  GlossaryLanguage.nb: 'nb',
+  GlossaryLanguage.nl: 'nl',
+  GlossaryLanguage.pl: 'pl',
+  GlossaryLanguage.pt: 'pt',
+  GlossaryLanguage.ro: 'ro',
+  GlossaryLanguage.ru: 'ru',
+  GlossaryLanguage.sv: 'sv',
+  GlossaryLanguage.zh: 'zh',
+  GlossaryLanguage.unknown: 'unknown',
+};
+
+Quota _$QuotaFromJson(Map<String, dynamic> json) => Quota()
+  ..characterCount = json['character_count'] as int? ?? 0
+  ..characterLimit = json['character_limit'] as int? ?? 0;
+
+Translation _$TranslationFromJson(Map<String, dynamic> json) => Translation()
+  ..detectedLanguage = $enumDecodeNullable(
+      _$SourceLanguageEnumMap, json['detected_source_language'],
+      unknownValue: SourceLanguage.unknown)
+  ..text = json['text'] as String?;
 
 TranslateRequestOptions _$TranslateRequestOptionsFromJson(
         Map<String, dynamic> json) =>

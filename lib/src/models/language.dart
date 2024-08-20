@@ -8,7 +8,7 @@ part of '_models.dart';
 @JsonSerializable()
 class Language {
   @JsonKey(name: 'language')
-  GlossaryLanguage languageCode;
+  SourceLanguage languageCode;
   String name;
   @JsonKey(name: 'supports_formality')
   bool supportsFormality;

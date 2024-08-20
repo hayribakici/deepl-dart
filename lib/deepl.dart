@@ -15,5 +15,7 @@ part 'src/deepl_api.dart';
 part 'src/deepl_error.dart';
 part 'src/endpoints/endpoint.dart';
 part 'src/endpoints/documents.dart';
+part 'src/endpoints/languages.dart';
 part 'src/endpoints/glossaries.dart';
 part 'src/endpoints/translations.dart';
+part 'src/endpoints/quotas.dart';

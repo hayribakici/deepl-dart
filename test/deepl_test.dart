@@ -82,4 +82,24 @@ void main() {
       expect(translated.first.text, 'hola');
     });
   });
+
+  group('quota', () {
+
+    test('get', () async {
+      var quota = await deepl.quota.get();
+      expect(quota, isNotNull);
+      expect(quota.characterCount, 10);
+      expect(quota.characterLimit, 10);
+    });
+  });
+
+  group('language', () {
+    test('supported languages', () async {
+      var supported = await deepl.languages.supportedLanguages();
+      expect(supported, isNotNull);
+      expect(supported.first.languageCode, SourceLanguage.BG);
+      expect(supported.first.name, 'Bulgarian');
+      expect(supported.first.supportsFormality, false);
+    });
+  });
 }
