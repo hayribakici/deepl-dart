@@ -55,7 +55,7 @@ class Glossaries extends DeepLEndpoint {
     Map<String, String> entries = {};
 
     try {
-      var entryLines = responseString.split('\n');
+      // var entryLines = responseString.split('\n');
       // var split = entryLines.map((e) => e.split(GlossaryFormat.tsv.formatValue));
       // entries = { for (var item in split) item[0] : item[1] };
       var parsed =

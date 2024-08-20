@@ -32,19 +32,30 @@ abstract class DeepLApi {
     return _handleResponse(response);
   }
 
-  Future<String> _postFormData(String path, File file) {
-    FormData data = FormData();
+  Future<String> _postFormData(String urlPath, String filename) async {
+    http.MultipartRequest request =
+        http.MultipartRequest('POST', Uri.parse('$endpoint/$urlPath'));
+    request.files.add(http.MultipartFile.fromBytes(
+        'deepl_document', File(filename).readAsBytesSync(),
+        filename: filename.split('/').last));
+    // FormData data = FormData();
     // HttpRequest request = HttpRequestUpload('POST', Uri.parse('$endpoint/$path'), )..
     // _client.send(request)
     // HttpRequest.request('/upload', method: 'POST', sendData: data).then((HttpRequest r) {
-      // HttpRequestUpload
-  // ...
+    // HttpRequestUpload
+    // ...
 // });
+    var response = await request.send();
+    // return _handleResponse(response);
+    return '';
   }
 
   Future<String> _handleResponse(http.Response response) async {
-    // (await response).
-    return utf8.decode(response.bodyBytes);
+    final responseBody = utf8.decode(response.bodyBytes);
+    if (response.statusCode >= 400) {
+      // TODO error handling
+    }
+    return responseBody;
   }
 
   Map<String, String> _buildRequestHeader(Map<String, String>? headers) {

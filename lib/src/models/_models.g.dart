@@ -125,12 +125,6 @@ const _$FormalityEnumMap = {
   Formality.preferLess: 'preferLess',
 };
 
-TranslationResponse _$TranslationResponseFromJson(Map<String, dynamic> json) =>
-    TranslationResponse()
-      ..translations = (json['translations'] as List<dynamic>?)
-          ?.map((e) => Translation.fromJson(e as Map<String, dynamic>))
-          .toList();
-
 Glossary _$GlossaryFromJson(Map<String, dynamic> json) => Glossary()
   ..id = json['glossary_id'] as String?
   ..name = json['name'] as String?
