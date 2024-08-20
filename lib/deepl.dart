@@ -9,7 +9,7 @@ import 'dart:core';
 
 import 'package:csv/csv.dart';
 import 'package:deepl/src/models/_models.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 part 'src/deepl_api.dart';
 part 'src/deepl_error.dart';

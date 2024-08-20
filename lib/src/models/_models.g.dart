@@ -87,35 +87,29 @@ Translation _$TranslationFromJson(Map<String, dynamic> json) => Translation()
       unknownValue: SourceLanguage.unknown)
   ..text = json['text'] as String?;
 
-TranslateRequestOptions _$TranslateRequestOptionsFromJson(
+TranslateTextRequestOptions _$TranslateTextRequestOptionsFromJson(
         Map<String, dynamic> json) =>
-    TranslateRequestOptions()
+    TranslateTextRequestOptions()
       ..source =
           $enumDecodeNullable(_$SourceLanguageEnumMap, json['source_lang'])
+      ..formality = $enumDecode(_$FormalityEnumMap, json['formality'])
+      ..glossaryId = json['glossary_id'] as String?
       ..context = json['context'] as String?
       ..splitSentenceOption = $enumDecode(
           _$SplitSentenceOptionEnumMap, json['split_sentence_option'])
-      ..preserveFormatting = json['preserve_formatting'] as bool
-      ..formality = $enumDecode(_$FormalityEnumMap, json['formality'])
-      ..glossaryId = json['glossary_id'] as String?;
+      ..preserveFormatting = json['preserve_formatting'] as bool;
 
-Map<String, dynamic> _$TranslateRequestOptionsToJson(
-        TranslateRequestOptions instance) =>
+Map<String, dynamic> _$TranslateTextRequestOptionsToJson(
+        TranslateTextRequestOptions instance) =>
     <String, dynamic>{
       'source_lang': _$SourceLanguageEnumMap[instance.source],
+      'formality': _$FormalityEnumMap[instance.formality]!,
+      'glossary_id': instance.glossaryId,
       'context': instance.context,
       'split_sentence_option':
           _$SplitSentenceOptionEnumMap[instance.splitSentenceOption]!,
       'preserve_formatting': instance.preserveFormatting,
-      'formality': _$FormalityEnumMap[instance.formality]!,
-      'glossary_id': instance.glossaryId,
     };
-
-const _$SplitSentenceOptionEnumMap = {
-  SplitSentenceOption.keep: 'keep',
-  SplitSentenceOption.punctuation: 'punctuation',
-  SplitSentenceOption.all: 'all',
-};
 
 const _$FormalityEnumMap = {
   Formality.def: 'def',
@@ -123,6 +117,43 @@ const _$FormalityEnumMap = {
   Formality.less: 'less',
   Formality.preferMore: 'preferMore',
   Formality.preferLess: 'preferLess',
+};
+
+const _$SplitSentenceOptionEnumMap = {
+  SplitSentenceOption.keep: 'keep',
+  SplitSentenceOption.punctuation: 'punctuation',
+  SplitSentenceOption.all: 'all',
+};
+
+TranslateDocumentRequestOptions _$TranslateDocumentRequestOptionsFromJson(
+        Map<String, dynamic> json) =>
+    TranslateDocumentRequestOptions()
+      ..source =
+          $enumDecodeNullable(_$SourceLanguageEnumMap, json['source_lang'])
+      ..formality = $enumDecode(_$FormalityEnumMap, json['formality'])
+      ..glossaryId = json['glossary_id'] as String?
+      ..outputFormat = $enumDecodeNullable(
+          _$SupportetFileTypesEnumMap, json['output_format']);
+
+Map<String, dynamic> _$TranslateDocumentRequestOptionsToJson(
+        TranslateDocumentRequestOptions instance) =>
+    <String, dynamic>{
+      'source_lang': _$SourceLanguageEnumMap[instance.source],
+      'formality': _$FormalityEnumMap[instance.formality]!,
+      'glossary_id': instance.glossaryId,
+      'output_format': _$SupportetFileTypesEnumMap[instance.outputFormat],
+    };
+
+const _$SupportetFileTypesEnumMap = {
+  SupportetFileTypes.docx: 'docx',
+  SupportetFileTypes.pptx: 'pptx',
+  SupportetFileTypes.xlsx: 'xlsx',
+  SupportetFileTypes.pdf: 'pdf',
+  SupportetFileTypes.htm: 'htm',
+  SupportetFileTypes.html: 'html',
+  SupportetFileTypes.txt: 'txt',
+  SupportetFileTypes.xlf: 'xlf',
+  SupportetFileTypes.srt: 'srt',
 };
 
 Glossary _$GlossaryFromJson(Map<String, dynamic> json) => Glossary()
@@ -141,11 +172,12 @@ Glossary _$GlossaryFromJson(Map<String, dynamic> json) => Glossary()
 DocumentStatus _$DocumentStatusFromJson(Map<String, dynamic> json) =>
     DocumentStatus()
       ..documentId = json['document_id'] as String?
-      ..translationStatus = $enumDecodeNullable(_$StatusEnumMap, json['status'])
+      ..translationStatus =
+          $enumDecodeNullable(_$TranslationStatusEnumMap, json['status'])
       ..billedCharacters = json['billed_characters'] as int?
       ..errorMessage = json['error_message'] as String?;
 
-const _$StatusEnumMap = {
+const _$TranslationStatusEnumMap = {
   TranslationStatus.queued: 'queued',
   TranslationStatus.translating: 'translating',
   TranslationStatus.done: 'done',

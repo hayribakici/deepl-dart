@@ -6,26 +6,34 @@ part of '_models.dart';
 @JsonSerializable(createToJson: false)
 class Translation {
   Translation();
-  
+
   factory Translation.fromJson(Map<String, dynamic> json) =>
       _$TranslationFromJson(json);
 
   @JsonKey(
-      name: 'detected_source_language', unknownEnumValue: SourceLanguage.unknown)
+      name: 'detected_source_language',
+      unknownEnumValue: SourceLanguage.unknown)
   SourceLanguage? detectedLanguage;
 
   @JsonKey(name: 'text')
   String? text;
 }
 
-/// Options for calling [Translations.translateText].
-@JsonSerializable()
-final class TranslateRequestOptions {
-
-  TranslateRequestOptions();
-
+/// Base class for emitting translations
+abstract class TranslateRequestOptions {
   @JsonKey(name: 'source_lang')
   SourceLanguage? source;
+
+  Formality formality = Formality.def;
+
+  @JsonKey(name: 'glossary_id')
+  String? glossaryId;
+}
+
+/// Options for calling [Translations.translateText].
+@JsonSerializable()
+final class TranslateTextRequestOptions extends TranslateRequestOptions {
+  TranslateTextRequestOptions();
 
   String? context;
 
@@ -35,17 +43,13 @@ final class TranslateRequestOptions {
   @JsonKey(name: 'preserve_formatting')
   bool preserveFormatting = false;
 
-  
-  Formality formality = Formality.def;
+  Map<String, dynamic> toJson() => _$TranslateTextRequestOptionsToJson(this);
 
-  @JsonKey(name: 'glossary_id')
-  String? glossaryId;
+  factory TranslateTextRequestOptions.fromJson(Map<String, dynamic> json) =>
+      _$TranslateTextRequestOptionsFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TranslateRequestOptionsToJson(this);
-
-  factory TranslateRequestOptions.fromJson(Map<String, dynamic> json) => _$TranslateRequestOptionsFromJson(json);
-
-  TranslateRequestOptions._builder(TranslateRequestOptionsBuilder builder) {
+  TranslateTextRequestOptions._builder(
+      TranslateTextRequestOptionsBuilder builder) {
     source = builder.source;
     context = builder.context;
     preserveFormatting = builder.preserveFormatting;
@@ -54,23 +58,64 @@ final class TranslateRequestOptions {
   }
 }
 
-/// Builder class for [TranslateRequestOptions]
-final class TranslateRequestOptionsBuilder {
+abstract class TranslateRequestBuilder<T> {
   SourceLanguage? source;
+
+  Formality formality = Formality.def;
+  String? glossaryId;
+
+  T build();
+}
+
+/// Builder class for [TranslateTextRequestOptions]
+final class TranslateTextRequestOptionsBuilder
+    extends TranslateRequestBuilder<TranslateTextRequestOptions> {
   String? context;
 
   SplitSentenceOption splitSentenceOption = SplitSentenceOption.keep;
   bool preserveFormatting = false;
-  Formality formality = Formality.def;
-  String? glossaryId;
 
-  TranslateRequestOptions build() => TranslateRequestOptions._builder(this);
+  @override
+  TranslateTextRequestOptions build() =>
+      TranslateTextRequestOptions._builder(this);
+}
+
+/// Options for calling [Translations.translateDocument].
+@JsonSerializable()
+final class TranslateDocumentRequestOptions extends TranslateRequestOptions {
+  TranslateDocumentRequestOptions();
+
+  @JsonKey(name: 'output_format')
+  SupportetFileTypes? outputFormat;
+
+  Map<String, dynamic> toJson() =>
+      _$TranslateDocumentRequestOptionsToJson(this);
+
+  factory TranslateDocumentRequestOptions.fromJson(Map<String, dynamic> json) =>
+      _$TranslateDocumentRequestOptionsFromJson(json);
+
+  TranslateDocumentRequestOptions._builder(
+      TranslateDocumentRequestOptionsBuilder builder) {
+    source = builder.source;
+    outputFormat = builder.outputFormat;
+    formality = builder.formality;
+    glossaryId = builder.glossaryId;
+  }
+}
+
+final class TranslateDocumentRequestOptionsBuilder
+    extends TranslateRequestBuilder<TranslateDocumentRequestOptions> {
+  SupportetFileTypes? outputFormat;
+
+  @override
+  TranslateDocumentRequestOptions build() =>
+      TranslateDocumentRequestOptions._builder(this);
 }
 
 /// Options whether to first split the input into sentences.
 enum SplitSentenceOption {
   /// No splitting at all.
-  /// 
+  ///
   /// The whole input is treated as one sentence
   keep,
 
@@ -81,7 +126,7 @@ enum SplitSentenceOption {
   all
 }
 
-/// 
+///
 enum Formality {
   /// Default formality
   def(apiName: 'default'),
@@ -101,4 +146,24 @@ enum Formality {
   const Formality({required this.apiName});
 
   final String apiName;
+}
+
+enum SupportetFileTypes {
+  docx, // - Microsoft Word Document
+
+  pptx, // - Microsoft PowerPoint Document
+
+  xlsx, // - Microsoft Excel Document
+
+  pdf, // - Portable Document Format
+
+  htm,
+
+  html, // - HTML Document
+
+  txt, // - Plain Text Document
+
+  xlf, // / xliff - XLIFF Document, version 2.1
+
+  srt, //
 }

@@ -6,16 +6,16 @@ part of '../deepl.dart';
 abstract class DeepLApi {
   final int version = 2;
   late String _key;
-  late http.Client _client;
+  late Client _client;
   late Documents _documents;
   late Translations _translations;
   late Glossaries _glossary;
   late Languages _languages;
   late Quotas _quotas;
 
-  DeepLApi(String key, {http.BaseClient? client}) {
+  DeepLApi(String key, {BaseClient? client}) {
     _key = key;
-    _client = client ?? http.Client();
+    _client = client ?? Client();
 
     _documents = Documents(this);
     _glossary = Glossaries(this);
@@ -37,25 +37,17 @@ abstract class DeepLApi {
   }
 
   // ignore: unused_element
-  Future<String> _postFormData(String urlPath, String filename) async {
-    http.MultipartRequest request =
-        http.MultipartRequest('POST', Uri.parse('$endpoint/$urlPath'));
-    request.files.add(http.MultipartFile.fromBytes(
-        'deepl_document', File(filename).readAsBytesSync(),
-        filename: filename.split('/').last));
-    // FormData data = FormData();
-    // HttpRequest request = HttpRequestUpload('POST', Uri.parse('$endpoint/$path'), )..
-    // _client.send(request)
-    // HttpRequest.request('/upload', method: 'POST', sendData: data).then((HttpRequest r) {
-    // HttpRequestUpload
-    // ...
-// });
-    // var response = await request.send();
-    // return _handleResponse(response);
-    return '';
+  Future<String> _postFormData(
+      String urlPath, String filename, String? body) async {
+    MultipartRequest request =
+        MultipartRequest('POST', Uri.parse('$endpoint/$urlPath'));
+    MultipartFile.fromBytes('deepl_document', File(filename).readAsBytesSync(),
+        filename: filename.split('/').last);
+    var response = await request.send();
+    return await response.stream.bytesToString();
   }
 
-  Future<String> _handleResponse(http.Response response) async {
+  Future<String> _handleResponse(Response response) async {
     final responseBody = utf8.decode(response.bodyBytes);
     if (response.statusCode >= 400) {
       // TODO error handling

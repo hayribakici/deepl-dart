@@ -3,16 +3,26 @@
 
 part of '../../deepl.dart';
 
-/// 
+///
 class Documents extends DeepLEndpoint {
   Documents(super.api);
 
   @override
   String get _path => 'document';
 
+  final supportedFileTypes = SupportetFileTypes.values.map((e) => e.name);
+
   /// Uploads a document referenced as [filename].
-  Future<Document> uploadDocument(String filename) async {
-    return Document('documentId', 'documentKey');
+  Future<Document> uploadDocument(String filename,
+      {TranslateDocumentRequestOptions? options}) async {
+    var extension = filename.split('.').last;
+    if (!supportedFileTypes.contains(extension)) {
+      throw ArgumentError(
+          'File is unsupported file type. Allowed: $supportedFileTypes');
+    }
+    var jsonMap = options?.toJson() ?? {}; 
+    jsonMap['filename'] = filename;
+    return Document.fromJson(jsonDecode(await _api._postFormData(_path, filename, jsonEncode(jsonMap))));
   }
 
   /// Retrieve the [DocumentStatus] of the [documentId] and [documentKey]
@@ -21,3 +31,5 @@ class Documents extends DeepLEndpoint {
     return DocumentStatus.fromJson(jsonDecode(jsonResponse));
   }
 }
+
+

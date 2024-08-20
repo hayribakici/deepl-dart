@@ -74,7 +74,7 @@ void main() {
   group('translation', () {
     test('translate', () async {
       var translated = await deepl.translations
-          .translateText('hello', target: TargetLanguage.ES);
+          .translateText(['hello'], target: TargetLanguage.ES);
       expect(translated, isNotNull);
 
       expect(translated, isNotEmpty);
