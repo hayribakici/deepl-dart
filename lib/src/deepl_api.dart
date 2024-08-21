@@ -37,12 +37,15 @@ abstract class DeepLApi {
   }
 
   // ignore: unused_element
-  Future<String> _postFormData(
-      String urlPath, String filename, String? body) async {
+  Future<String> _postFormData(String urlPath, String filename,
+      {Map<String, String>? headers, Map<String, String>? fields}) async {
     MultipartRequest request =
-        MultipartRequest('POST', Uri.parse('$endpoint/$urlPath'));
-    MultipartFile.fromBytes('deepl_document', File(filename).readAsBytesSync(),
-        filename: filename.split('/').last);
+        MultipartRequest('POST', Uri.parse('$endpoint/$urlPath'))
+          ..headers.addAll(_buildBaseRequestHeader(headers))
+          ..fields.addAll(fields ?? {})
+          ..files.add(MultipartFile.fromBytes(
+              'deepl_document', File(filename).readAsBytesSync(),
+              filename: filename.split('/').last));
     var response = await request.send();
     return await response.stream.bytesToString();
   }
@@ -55,10 +58,9 @@ abstract class DeepLApi {
     return responseBody;
   }
 
-  Map<String, String> _buildRequestHeader(Map<String, String>? headers) {
+  Map<String, String> _buildBaseRequestHeader(Map<String, String>? headers) {
     var base = {
-      HttpHeaders.authorizationHeader: 'DeepL-Auth-Key $_key',
-      HttpHeaders.contentTypeHeader: ContentType.json.mimeType
+      HttpHeaders.authorizationHeader: 'DeepL-Auth-Key $_key'
     };
     if (headers == null) {
       headers = base;
@@ -66,6 +68,12 @@ abstract class DeepLApi {
       headers.addAll(base);
     }
     return headers;
+  }
+
+  Map<String, String> _buildRequestHeader(Map<String, String>? headers) {
+    var baseHeaders = _buildBaseRequestHeader(headers);
+    baseHeaders[HttpHeaders.contentTypeHeader] = ContentType.json.mimeType;
+    return baseHeaders;
   }
 
   String get endpoint;
