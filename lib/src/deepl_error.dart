@@ -1,10 +1,16 @@
 part of '../deepl.dart';
 
 
-class DeepLExcetpion extends HttpException {
+class DeepLException extends HttpException {
 
-  int status;
+  int? status;
 
-  DeepLExcetpion(super.message, this.status);
+  DeepLException(super.message, [this.status]);
+
+  factory DeepLException.fromError(DeepLError error) {
+    // message = error.message;
+    // status = error.sta
+    return DeepLException('error');
+  }
   
 }

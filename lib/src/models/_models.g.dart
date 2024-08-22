@@ -188,3 +188,6 @@ Document _$DocumentFromJson(Map<String, dynamic> json) => Document(
       json['document_id'] as String,
       json['document_key'] as String,
     );
+
+DeepLError _$DeepLErrorFromJson(Map<String, dynamic> json) =>
+    DeepLError()..message = json['title'] as String?;

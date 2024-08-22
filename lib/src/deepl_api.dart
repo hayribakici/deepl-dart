@@ -24,10 +24,8 @@ abstract class DeepLApi {
     _quotas = Quotas(this);
   }
 
-  Future<String> _get(String path, {Map<String, String>? headers}) async {
-    return _handleResponse(await _client.get(Uri.parse('$endpoint/$path'),
+  Future<String> _get(String path, {Map<String, String>? headers}) async => _handleResponse(await _client.get(Uri.parse('$endpoint/$path'),
         headers: _buildRequestHeader(headers)));
-  }
 
   Future<String> _post(String path, String body,
       {Map<String, String>? headers}) async {
@@ -35,6 +33,8 @@ abstract class DeepLApi {
         headers: _buildRequestHeader(headers), body: body);
     return _handleResponse(response);
   }
+
+  Future<void> _delete(String path, {Map<String, String>? headers}) async => _handleResponse(await _client.delete(Uri.parse('$endpoint/$path'), headers: _buildBaseRequestHeader(headers)));
 
   // ignore: unused_element
   Future<String> _postFormData(String urlPath, String filename,
@@ -54,6 +54,8 @@ abstract class DeepLApi {
     final responseBody = utf8.decode(response.bodyBytes);
     if (response.statusCode >= 400) {
       // TODO error handling
+      print(responseBody);
+      throw DeepLException('res', response.statusCode);
     }
     return responseBody;
   }

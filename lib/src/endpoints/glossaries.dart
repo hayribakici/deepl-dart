@@ -38,6 +38,8 @@ class Glossaries extends DeepLEndpoint {
   Future<Glossary> get(String id) async =>
       _handleGet('$_path/$id', fromJson: Glossary.fromJson);
 
+  Future<void> delete(String id) async => _api._delete('$_path/$id');
+
   /// Retrieves the entries from [id].
   // FIXME
   Future<Map<String, String>> getEntries(String id) async {

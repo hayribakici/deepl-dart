@@ -13,3 +13,4 @@ part 'quota.dart';
 part 'translation.dart';
 part 'glossary.dart';
 part 'document.dart';
+part 'error.dart';
