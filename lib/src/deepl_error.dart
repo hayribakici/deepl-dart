@@ -1,8 +1,6 @@
 part of '../deepl.dart';
 
-
 class DeepLException extends HttpException {
-
   int? status;
 
   DeepLException(super.message, [this.status]);
@@ -12,5 +10,4 @@ class DeepLException extends HttpException {
     // status = error.sta
     return DeepLException('error');
   }
-  
 }

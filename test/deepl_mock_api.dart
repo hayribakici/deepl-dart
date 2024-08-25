@@ -9,7 +9,7 @@ class DeepLMockApi extends DeepLApi {
     return DeepLMockApi("", client: MockClient(handleRequest));
   }
 
-  DeepLMockApi(super.key, {super.client});
+  DeepLMockApi(super.key, {super.client}) : super._();
 
   @override
   String get endpoint => 'test/data/v$version';

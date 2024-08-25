@@ -3,8 +3,10 @@
 
 part of '../deepl.dart';
 
-abstract class DeepLApi {
+class DeepLApi {
   final int version = 2;
+  static const String _freeSuffix = ':fx';
+
   late String _key;
   late Client _client;
   late Documents _documents;
@@ -13,7 +15,7 @@ abstract class DeepLApi {
   late Languages _languages;
   late Quotas _quotas;
 
-  DeepLApi(String key, {BaseClient? client}) {
+  DeepLApi._(String key, {BaseClient? client}) {
     _key = key;
     _client = client ?? Client();
 
@@ -24,8 +26,14 @@ abstract class DeepLApi {
     _quotas = Quotas(this);
   }
 
-  Future<String> _get(String path, {Map<String, String>? headers}) async => _handleResponse(await _client.get(Uri.parse('$endpoint/$path'),
-        headers: _buildRequestHeader(headers)));
+  factory DeepLApi(String key, {BaseClient? client}) =>
+      key.endsWith(_freeSuffix)
+          ? _DeepLFreeApi(key, client: client)
+          : _DeepLProApi(key, client: client);
+
+  Future<String> _get(String path, {Map<String, String>? headers}) async =>
+      _handleResponse(await _client.get(Uri.parse('$endpoint/$path'),
+          headers: _buildRequestHeader(headers)));
 
   Future<String> _post(String path, String body,
       {Map<String, String>? headers}) async {
@@ -34,18 +42,21 @@ abstract class DeepLApi {
     return _handleResponse(response);
   }
 
-  Future<void> _delete(String path, {Map<String, String>? headers}) async => _handleResponse(await _client.delete(Uri.parse('$endpoint/$path'), headers: _buildBaseRequestHeader(headers)));
+  Future<void> _delete(String path, {Map<String, String>? headers}) async =>
+      _handleResponse(await _client.delete(Uri.parse('$endpoint/$path'),
+          headers: _buildBaseRequestHeader(headers)));
 
   // ignore: unused_element
   Future<String> _postFormData(String urlPath, String filename,
       {Map<String, String>? headers, Map<String, String>? fields}) async {
+    var field = filename.split('/').last;
     MultipartRequest request =
         MultipartRequest('POST', Uri.parse('$endpoint/$urlPath'))
           ..headers.addAll(_buildBaseRequestHeader(headers))
           ..fields.addAll(fields ?? {})
           ..files.add(MultipartFile.fromBytes(
-              'deepl_document', File(filename).readAsBytesSync(),
-              filename: filename.split('/').last));
+              field, File(filename).readAsBytesSync(),
+              filename: field));
     var response = await request.send();
     return await response.stream.bytesToString();
   }
@@ -61,9 +72,7 @@ abstract class DeepLApi {
   }
 
   Map<String, String> _buildBaseRequestHeader(Map<String, String>? headers) {
-    var base = {
-      HttpHeaders.authorizationHeader: 'DeepL-Auth-Key $_key'
-    };
+    var base = {HttpHeaders.authorizationHeader: 'DeepL-Auth-Key $_key'};
     if (headers == null) {
       headers = base;
     } else {
@@ -78,7 +87,7 @@ abstract class DeepLApi {
     return baseHeaders;
   }
 
-  String get endpoint;
+  String get endpoint => '';
 
   Documents get documents => _documents;
   Glossaries get glossary => _glossary;
@@ -87,17 +96,16 @@ abstract class DeepLApi {
   Quotas get quota => _quotas;
 }
 
-class DeepLFreeApi extends DeepLApi {
-  DeepLFreeApi(super.key, {super.client});
+class _DeepLFreeApi extends DeepLApi {
+  // _DeepLFreeApi(super.key, {super.client});
+  _DeepLFreeApi(super.key, {super.client}) : super._();
 
   @override
   String get endpoint => 'https://api-free.deepl.com/v$version';
 }
 
-class DeepLProApi extends DeepLApi {
-  DeepLProApi(super.key, {super.client}) {
-    _glossary = Glossaries(this);
-  }
+class _DeepLProApi extends DeepLApi {
+  _DeepLProApi(super.key, {super.client}) : super._();
 
   @override
   String get endpoint => 'https://api.deepl.com/v$version';
