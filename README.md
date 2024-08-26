@@ -14,7 +14,7 @@ Put `deepl: <latest version>` into your `pubspec.yaml` or call  `dart pub add de
 Create an instance with 
 
 ```dart
-var deeplApi = DeepLFreeApi(<your API key>);
+var deeplApi = DeepLApi.fromAuthKey(<your API key>);
 ```
 
 and access the API through the namespaces e.g.
@@ -25,5 +25,12 @@ for (var glossary in glossaries) {
     print(glossary.name);
 }
 ```
+
+### Supported endpoints
+
+- [] translating documents
+- x[] translating text
+- x[] glossaries
+- [x] tranlation quota
 
 
