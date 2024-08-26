@@ -77,7 +77,7 @@ void main() {
         expect(method, 'POST');
         expect(body, isNotNull);
         expect(body,
-            '{"target_lang":"ES","formality":"default","glossary_id":null,"text":["hello"],"context":null,"split_sentence_option":"keep","preserve_formatting":false}');
+            '{"target_lang":"ES","formality":"default","text":["hello"],"context":null,"split_sentence_option":"keep","preserve_formatting":false}');
       };
       var translated = await deepl.translations.translateText(
         options: TranslateTextRequestOptionsBuilder.simple(
