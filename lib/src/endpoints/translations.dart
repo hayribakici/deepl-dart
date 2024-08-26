@@ -24,8 +24,7 @@ class Translations extends DeepLEndpoint {
   /// Uploads and translates a document's [filename] with given [targetLanguage].
   Future<DocumentStatus> translateDocument(
       {required TranslateDocumentRequestOptions options}) async {
-    var document = await _api.documents
-        .uploadDocument(options.filename, options.target, options: options);
-    return _api.documents.status(document.documentId, document.documentKey);
+    var document = await _api.documents.uploadDocument(options: options);
+    return _api.documents.status(document);
   }
 }

@@ -32,42 +32,59 @@ abstract class DeepLApi {
           ? _DeepLFreeApi(key, client: client)
           : _DeepLProApi(key, client: client);
 
-  Future<String> _get(String path, {Map<String, String>? headers}) async =>
-      _handleResponse(await _client.get(Uri.parse('$endpoint/$path'),
-          headers: _buildRequestHeader(headers)));
+  Future<String> _get(String path, {Map<String, String>? headers}) async {
+    var response = await _client.get(Uri.parse('$endpoint/$path'),
+        headers: _buildRequestHeader(headers));
+    return _handleResponse(
+        response, () async => utf8.decode(response.bodyBytes));
+  }
 
   Future<String> _post(String path, String body,
+      {Map<String, String>? headers, BodyHandler? handler}) async {
+    var response = await _client.post(Uri.parse('$endpoint/$path'),
+        headers: _buildRequestHeader(headers), body: body);
+    return _handleResponse(
+        response, () async => utf8.decode(response.bodyBytes));
+  }
+
+  Future<Response> _postRaw(String path, String body,
       {Map<String, String>? headers}) async {
     var response = await _client.post(Uri.parse('$endpoint/$path'),
         headers: _buildRequestHeader(headers), body: body);
-    return _handleResponse(response);
+    return response;
   }
 
-  Future<void> _delete(String path, {Map<String, String>? headers}) async =>
-      _handleResponse(await _client.delete(Uri.parse('$endpoint/$path'),
-          headers: _buildBaseRequestHeader(headers)));
+  Future<void> _delete(String path, {Map<String, String>? headers}) async {
+    var response = await _client.delete(Uri.parse('$endpoint/$path'),
+        headers: _buildBaseRequestHeader(headers));
+    _handleResponse(response, () async => utf8.decode(response.bodyBytes));
+  }
 
   // ignore: unused_element
-  Future<String> _postFormData(String urlPath, String filename,
+  Future<String> _postFormData(String path, String filename,
       {Map<String, String>? headers, Map<String, String>? fields}) async {
     var field = filename.split('/').last;
     MultipartRequest request =
-        MultipartRequest('POST', Uri.parse('$endpoint/$urlPath'))
+        MultipartRequest('POST', Uri.parse('$endpoint/$path'))
           ..headers.addAll(_buildBaseRequestHeader(headers))
           ..fields.addAll(fields ?? {})
           ..files.add(MultipartFile.fromBytes(
               field, File(filename).readAsBytesSync(),
               filename: field));
     var response = await request.send();
-    return await response.stream.bytesToString();
+    // return await response.stream.bytesToString();
+    return _handleResponse(
+        response, () async => await response.stream.bytesToString());
   }
 
-  Future<String> _handleResponse(Response response) async {
-    final responseBody = utf8.decode(response.bodyBytes);
+  Future<String> _handleResponse(
+      BaseResponse response, Future<String> Function() body) async {
+    final responseBody = await body();
     if (response.statusCode >= 400) {
       // TODO error handling
       print(responseBody);
-      throw DeepLException('res', response.statusCode);
+      var error = DeepLError.fromJson(jsonDecode(responseBody));
+      throw DeepLException.fromError(response.statusCode, error);
     }
     return responseBody;
   }
@@ -120,3 +137,5 @@ class _DeepLProApi extends DeepLApi {
   @override
   String get endpoint => 'https://api.deepl.com/v$version';
 }
+
+typedef BodyHandler = Future<String> Function();

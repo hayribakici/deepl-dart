@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:deepl/deepl.dart';
 import 'package:deepl/src/models/_models.dart';
 import 'package:test/test.dart';
@@ -77,11 +79,11 @@ void main() {
         expect(method, 'POST');
         expect(body, isNotNull);
         expect(body,
-            '{"source_lang":null,"target_lang":"ES","formality":"default","glossary_id":null,"text":["hello"],"context":null,"split_sentence_option":"keep","preserve_formatting":false}');
+            '{"target_lang":"ES","formality":"default","glossary_id":null,"text":["hello"],"context":null,"split_sentence_option":"keep","preserve_formatting":false}');
       };
       var translated = await deepl.translations.translateText(
-        options: TranslateTextRequestOptionsBuilder(
-          text: ['hello'],
+        options: TranslateTextRequestOptionsBuilder.simple(
+          text: 'hello',
           target: TargetLanguage.ES,
         ).build(),
       );
@@ -92,6 +94,21 @@ void main() {
       expect(translated.first.text, 'hola');
     });
   });
+
+  // group('documents', () {
+  // test('translate document', () async {
+  //   deepl = DeepLMockApi.streaming();
+  //   interceptor = (method, url, headers, [body]) {
+  //     print(body);
+  //   };
+  //   var t = await deepl.documents.uploadDocument(
+  //       options: TranslateDocumentRequestOptionsBuilder(
+  //               filename: '${Directory.current.path}/example/translate.txt',
+  //               target: TargetLanguage.ES)
+  //           .build());
+  //   expect(t, isNotNull);
+  // });
+  // });
 
   group('quota', () {
     test('get', () async {

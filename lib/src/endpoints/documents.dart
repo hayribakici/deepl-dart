@@ -14,23 +14,30 @@ class Documents extends DeepLEndpoint {
 
   /// Uploads a document referenced as [filename].
   Future<Document> uploadDocument(
-      String filename, TargetLanguage targetLanguage,
-      {TranslateDocumentRequestOptions? options}) async {
+      {required TranslateDocumentRequestOptions options}) async {
+    var filename = options.filename;
     var extension = filename.split('.').last;
     if (!supportedFileTypes.contains(extension)) {
       throw ArgumentError(
-          'File is unsupported file type. Allowed: $supportedFileTypes');
+          'File is unsupported file type. Allowed: ${supportedFileTypes.join(',')}');
     }
-    Map<String, String> jsonMap = {};
-    jsonMap['filename'] = filename;
-    jsonMap['target_lang'] = targetLanguage.name;
-    return Document.fromJson(
-        jsonDecode(await _api._postFormData(_path, filename, fields: jsonMap)));
+    var json =
+        options.toJson().map((key, value) => MapEntry(key, value.toString()));
+    print(json);
+    var result = await _api._postFormData(_path, filename, fields: json);
+    return Document.fromJson(jsonDecode(result));
   }
 
   /// Retrieve the [DocumentStatus] of the [documentId] and [documentKey]
-  Future<DocumentStatus> status(String documentId, String documentKey) async {
-    var jsonResponse = await _post('$_path/$documentId', documentKey);
+  Future<DocumentStatus> status(Document document) async {
+    var jsonResponse = await _post('$_path/${document.documentId}',
+        jsonEncode({'document_key': document.documentKey}));
     return DocumentStatus.fromJson(jsonDecode(jsonResponse));
+  }
+
+  Future<List<int>> downloadDocument(Document document) async {
+    var response = await _api._postRaw('$_path/${document.documentId}/result',
+        jsonEncode({'document_key': document.documentKey}));
+    return response.bodyBytes;
   }
 }

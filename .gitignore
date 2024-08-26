@@ -206,4 +206,6 @@ $RECYCLE.BIN/
 **/env/
 .env
 
+.apikey
+
 # End of https://www.toptal.com/developers/gitignore/api/windows

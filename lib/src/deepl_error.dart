@@ -5,9 +5,7 @@ class DeepLException extends HttpException {
 
   DeepLException(super.message, [this.status]);
 
-  factory DeepLException.fromError(DeepLError error) {
-    // message = error.message;
-    // status = error.sta
-    return DeepLException('error');
+  factory DeepLException.fromError(int status, DeepLError error) {
+    return DeepLException(error.message ?? '', status);
   }
 }

@@ -102,18 +102,26 @@ TranslateTextRequestOptions _$TranslateTextRequestOptionsFromJson(
       ..preserveFormatting = json['preserve_formatting'] as bool;
 
 Map<String, dynamic> _$TranslateTextRequestOptionsToJson(
-        TranslateTextRequestOptions instance) =>
-    <String, dynamic>{
-      'source_lang': _$SourceLanguageEnumMap[instance.source],
-      'target_lang': _$TargetLanguageEnumMap[instance.target]!,
-      'formality': _$FormalityEnumMap[instance.formality]!,
-      'glossary_id': instance.glossaryId,
-      'text': instance.text,
-      'context': instance.context,
-      'split_sentence_option':
-          _$SplitSentenceOptionEnumMap[instance.splitSentenceOption]!,
-      'preserve_formatting': instance.preserveFormatting,
-    };
+    TranslateTextRequestOptions instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('source_lang', _$SourceLanguageEnumMap[instance.source]);
+  val['target_lang'] = _$TargetLanguageEnumMap[instance.target]!;
+  val['formality'] = _$FormalityEnumMap[instance.formality]!;
+  writeNotNull('glossary_id', instance.glossaryId);
+  val['text'] = instance.text;
+  val['context'] = instance.context;
+  val['split_sentence_option'] =
+      _$SplitSentenceOptionEnumMap[instance.splitSentenceOption]!;
+  val['preserve_formatting'] = instance.preserveFormatting;
+  return val;
+}
 
 const _$TargetLanguageEnumMap = {
   TargetLanguage.AR: 'AR',
@@ -180,15 +188,24 @@ TranslateDocumentRequestOptions _$TranslateDocumentRequestOptionsFromJson(
           _$SupportetFileTypesEnumMap, json['output_format']);
 
 Map<String, dynamic> _$TranslateDocumentRequestOptionsToJson(
-        TranslateDocumentRequestOptions instance) =>
-    <String, dynamic>{
-      'source_lang': _$SourceLanguageEnumMap[instance.source],
-      'target_lang': _$TargetLanguageEnumMap[instance.target]!,
-      'formality': _$FormalityEnumMap[instance.formality]!,
-      'glossary_id': instance.glossaryId,
-      'filename': instance.filename,
-      'output_format': _$SupportetFileTypesEnumMap[instance.outputFormat],
-    };
+    TranslateDocumentRequestOptions instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('source_lang', _$SourceLanguageEnumMap[instance.source]);
+  val['target_lang'] = _$TargetLanguageEnumMap[instance.target]!;
+  val['formality'] = _$FormalityEnumMap[instance.formality]!;
+  writeNotNull('glossary_id', instance.glossaryId);
+  val['filename'] = instance.filename;
+  writeNotNull(
+      'output_format', _$SupportetFileTypesEnumMap[instance.outputFormat]);
+  return val;
+}
 
 const _$SupportetFileTypesEnumMap = {
   SupportetFileTypes.docx: 'docx',
@@ -236,4 +253,4 @@ Document _$DocumentFromJson(Map<String, dynamic> json) => Document(
     );
 
 DeepLError _$DeepLErrorFromJson(Map<String, dynamic> json) =>
-    DeepLError()..message = json['title'] as String?;
+    DeepLError()..message = json['message'] as String?;

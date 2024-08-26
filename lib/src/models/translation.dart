@@ -27,7 +27,7 @@ class Translation {
 abstract class TranslateRequestOptions<T extends TranslateRequestBuilder> {
   TranslateRequestOptions();
 
-  @JsonKey(name: 'source_lang')
+  @JsonKey(name: 'source_lang', includeIfNull: false)
   SourceLanguage? source;
 
   @JsonKey(name: 'target_lang')
@@ -38,7 +38,7 @@ abstract class TranslateRequestOptions<T extends TranslateRequestBuilder> {
   )
   Formality formality = Formality.def;
 
-  @JsonKey(name: 'glossary_id')
+  @JsonKey(name: 'glossary_id', includeIfNull: false)
   String? glossaryId;
 
   TranslateRequestOptions._builder(T builder) {
@@ -96,6 +96,10 @@ abstract class TranslateRequestBuilder<T> {
 /// Builder class for [TranslateTextRequestOptions]
 final class TranslateTextRequestOptionsBuilder
     extends TranslateRequestBuilder<TranslateTextRequestOptions> {
+  TranslateTextRequestOptionsBuilder.simple(
+      {required String text, required TargetLanguage target})
+      : this(text: [text], target: target);
+
   TranslateTextRequestOptionsBuilder(
       {required this.text, required super.target});
 
@@ -118,7 +122,7 @@ final class TranslateDocumentRequestOptions
   TranslateDocumentRequestOptions();
   late String filename;
 
-  @JsonKey(name: 'output_format')
+  @JsonKey(name: 'output_format', includeIfNull: false)
   SupportetFileTypes? outputFormat;
 
   Map<String, dynamic> toJson() =>

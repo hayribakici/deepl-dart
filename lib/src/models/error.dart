@@ -2,7 +2,6 @@ part of '_models.dart';
 
 @JsonSerializable(createToJson: false)
 class DeepLError {
-  @JsonKey(name: 'title')
   String? message;
 
   DeepLError();
