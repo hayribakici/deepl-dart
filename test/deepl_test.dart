@@ -73,8 +73,18 @@ void main() {
 
   group('translation', () {
     test('translate', () async {
-      var translated = await deepl.translations
-          .translateText(['hello'], target: TargetLanguage.ES);
+      interceptor = (method, url, headers, [body]) {
+        expect(method, 'POST');
+        expect(body, isNotNull);
+        expect(body,
+            '{"source_lang":null,"target_lang":"ES","formality":"default","glossary_id":null,"text":["hello"],"context":null,"split_sentence_option":"keep","preserve_formatting":false}');
+      };
+      var translated = await deepl.translations.translateText(
+        options: TranslateTextRequestOptionsBuilder(
+          text: ['hello'],
+          target: TargetLanguage.ES,
+        ).build(),
+      );
       expect(translated, isNotNull);
 
       expect(translated, isNotEmpty);
@@ -84,7 +94,6 @@ void main() {
   });
 
   group('quota', () {
-
     test('get', () async {
       var quota = await deepl.quota.get();
       expect(quota, isNotNull);
@@ -97,7 +106,7 @@ void main() {
     test('supported languages', () async {
       var supported = await deepl.languages.supportedLanguages();
       expect(supported, isNotNull);
-      expect(supported.first.languageCode, SourceLanguage.BG);
+      expect(supported.first.sourceLang, SourceLanguage.BG);
       expect(supported.first.name, 'Bulgarian');
       expect(supported.first.supportsFormality, false);
     });

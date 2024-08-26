@@ -7,13 +7,13 @@ part of '_models.dart';
 // **************************************************************************
 
 Language _$LanguageFromJson(Map<String, dynamic> json) => Language(
-      languageCode: $enumDecode(_$SourceLanguageEnumMap, json['language']),
+      sourceLang: $enumDecode(_$SourceLanguageEnumMap, json['language']),
       name: json['name'] as String,
       supportsFormality: json['supports_formality'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$LanguageToJson(Language instance) => <String, dynamic>{
-      'language': _$SourceLanguageEnumMap[instance.languageCode]!,
+      'language': _$SourceLanguageEnumMap[instance.sourceLang]!,
       'name': instance.name,
       'supports_formality': instance.supportsFormality,
     };
@@ -92,8 +92,10 @@ TranslateTextRequestOptions _$TranslateTextRequestOptionsFromJson(
     TranslateTextRequestOptions()
       ..source =
           $enumDecodeNullable(_$SourceLanguageEnumMap, json['source_lang'])
+      ..target = $enumDecode(_$TargetLanguageEnumMap, json['target_lang'])
       ..formality = $enumDecode(_$FormalityEnumMap, json['formality'])
       ..glossaryId = json['glossary_id'] as String?
+      ..text = (json['text'] as List<dynamic>).map((e) => e as String).toList()
       ..context = json['context'] as String?
       ..splitSentenceOption = $enumDecode(
           _$SplitSentenceOptionEnumMap, json['split_sentence_option'])
@@ -103,20 +105,60 @@ Map<String, dynamic> _$TranslateTextRequestOptionsToJson(
         TranslateTextRequestOptions instance) =>
     <String, dynamic>{
       'source_lang': _$SourceLanguageEnumMap[instance.source],
+      'target_lang': _$TargetLanguageEnumMap[instance.target]!,
       'formality': _$FormalityEnumMap[instance.formality]!,
       'glossary_id': instance.glossaryId,
+      'text': instance.text,
       'context': instance.context,
       'split_sentence_option':
           _$SplitSentenceOptionEnumMap[instance.splitSentenceOption]!,
       'preserve_formatting': instance.preserveFormatting,
     };
 
+const _$TargetLanguageEnumMap = {
+  TargetLanguage.AR: 'AR',
+  TargetLanguage.BG: 'BG',
+  TargetLanguage.CS: 'CS',
+  TargetLanguage.DA: 'DA',
+  TargetLanguage.DE: 'DE',
+  TargetLanguage.EL: 'EL',
+  TargetLanguage.EN_GB: 'EN_GB',
+  TargetLanguage.EN_US: 'EN_US',
+  TargetLanguage.ES: 'ES',
+  TargetLanguage.ET: 'ET',
+  TargetLanguage.FI: 'FI',
+  TargetLanguage.FR: 'FR',
+  TargetLanguage.HU: 'HU',
+  TargetLanguage.ID: 'ID',
+  TargetLanguage.IT: 'IT',
+  TargetLanguage.JA: 'JA',
+  TargetLanguage.KO: 'KO',
+  TargetLanguage.LT: 'LT',
+  TargetLanguage.LV: 'LV',
+  TargetLanguage.NB: 'NB',
+  TargetLanguage.NL: 'NL',
+  TargetLanguage.PL: 'PL',
+  TargetLanguage.PT_BR: 'PT_BR',
+  TargetLanguage.PT_PT: 'PT_PT',
+  TargetLanguage.RO: 'RO',
+  TargetLanguage.RU: 'RU',
+  TargetLanguage.SK: 'SK',
+  TargetLanguage.SL: 'SL',
+  TargetLanguage.SV: 'SV',
+  TargetLanguage.TR: 'TR',
+  TargetLanguage.UK: 'UK',
+  TargetLanguage.ZH: 'ZH',
+  TargetLanguage.ZH_HANS: 'ZH_HANS',
+  TargetLanguage.ZH_HANT: 'ZH_HANT',
+  TargetLanguage.unknown: 'unknown',
+};
+
 const _$FormalityEnumMap = {
-  Formality.def: 'def',
+  Formality.def: 'default',
   Formality.more: 'more',
   Formality.less: 'less',
-  Formality.preferMore: 'preferMore',
-  Formality.preferLess: 'preferLess',
+  Formality.preferMore: 'prefer_more',
+  Formality.preferLess: 'prefer_less',
 };
 
 const _$SplitSentenceOptionEnumMap = {
@@ -130,8 +172,10 @@ TranslateDocumentRequestOptions _$TranslateDocumentRequestOptionsFromJson(
     TranslateDocumentRequestOptions()
       ..source =
           $enumDecodeNullable(_$SourceLanguageEnumMap, json['source_lang'])
+      ..target = $enumDecode(_$TargetLanguageEnumMap, json['target_lang'])
       ..formality = $enumDecode(_$FormalityEnumMap, json['formality'])
       ..glossaryId = json['glossary_id'] as String?
+      ..filename = json['filename'] as String
       ..outputFormat = $enumDecodeNullable(
           _$SupportetFileTypesEnumMap, json['output_format']);
 
@@ -139,8 +183,10 @@ Map<String, dynamic> _$TranslateDocumentRequestOptionsToJson(
         TranslateDocumentRequestOptions instance) =>
     <String, dynamic>{
       'source_lang': _$SourceLanguageEnumMap[instance.source],
+      'target_lang': _$TargetLanguageEnumMap[instance.target]!,
       'formality': _$FormalityEnumMap[instance.formality]!,
       'glossary_id': instance.glossaryId,
+      'filename': instance.filename,
       'output_format': _$SupportetFileTypesEnumMap[instance.outputFormat],
     };
 

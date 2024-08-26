@@ -3,6 +3,8 @@
 
 part of '_models.dart';
 
+/// Model class that represents a translation made by the
+/// translation engine.
 @JsonSerializable(createToJson: false)
 class Translation {
   Translation();
@@ -10,30 +12,51 @@ class Translation {
   factory Translation.fromJson(Map<String, dynamic> json) =>
       _$TranslationFromJson(json);
 
+  /// The detected source language
   @JsonKey(
       name: 'detected_source_language',
       unknownEnumValue: SourceLanguage.unknown)
   SourceLanguage? detectedLanguage;
 
+  /// The translated text
   @JsonKey(name: 'text')
   String? text;
 }
 
 /// Base class for emitting translations
-abstract class TranslateRequestOptions {
+abstract class TranslateRequestOptions<T extends TranslateRequestBuilder> {
+  TranslateRequestOptions();
+
   @JsonKey(name: 'source_lang')
   SourceLanguage? source;
 
+  @JsonKey(name: 'target_lang')
+  late TargetLanguage target;
+
+  @JsonKey(
+    name: 'formality',
+  )
   Formality formality = Formality.def;
 
   @JsonKey(name: 'glossary_id')
   String? glossaryId;
+
+  TranslateRequestOptions._builder(T builder) {
+    source = builder.source;
+    target = builder.target;
+    formality = builder.formality;
+    glossaryId = builder.glossaryId;
+  }
 }
 
 /// Options for calling [Translations.translateText].
 @JsonSerializable()
-final class TranslateTextRequestOptions extends TranslateRequestOptions {
+final class TranslateTextRequestOptions
+    extends TranslateRequestOptions<TranslateTextRequestOptionsBuilder> {
   TranslateTextRequestOptions();
+
+  @JsonKey(name: 'text')
+  late List<String> text;
 
   String? context;
 
@@ -49,17 +72,20 @@ final class TranslateTextRequestOptions extends TranslateRequestOptions {
       _$TranslateTextRequestOptionsFromJson(json);
 
   TranslateTextRequestOptions._builder(
-      TranslateTextRequestOptionsBuilder builder) {
-    source = builder.source;
+      TranslateTextRequestOptionsBuilder builder)
+      : super._builder(builder) {
+    text = builder.text;
     context = builder.context;
     preserveFormatting = builder.preserveFormatting;
-    formality = builder.formality;
-    glossaryId = builder.glossaryId;
   }
 }
 
 abstract class TranslateRequestBuilder<T> {
+  TranslateRequestBuilder({required this.target});
+
   SourceLanguage? source;
+
+  TargetLanguage target;
 
   Formality formality = Formality.def;
   String? glossaryId;
@@ -70,6 +96,11 @@ abstract class TranslateRequestBuilder<T> {
 /// Builder class for [TranslateTextRequestOptions]
 final class TranslateTextRequestOptionsBuilder
     extends TranslateRequestBuilder<TranslateTextRequestOptions> {
+  TranslateTextRequestOptionsBuilder(
+      {required this.text, required super.target});
+
+  late List<String> text;
+
   String? context;
 
   SplitSentenceOption splitSentenceOption = SplitSentenceOption.keep;
@@ -82,8 +113,10 @@ final class TranslateTextRequestOptionsBuilder
 
 /// Options for calling [Translations.translateDocument].
 @JsonSerializable()
-final class TranslateDocumentRequestOptions extends TranslateRequestOptions {
+final class TranslateDocumentRequestOptions
+    extends TranslateRequestOptions<TranslateDocumentRequestOptionsBuilder> {
   TranslateDocumentRequestOptions();
+  late String filename;
 
   @JsonKey(name: 'output_format')
   SupportetFileTypes? outputFormat;
@@ -94,17 +127,22 @@ final class TranslateDocumentRequestOptions extends TranslateRequestOptions {
   factory TranslateDocumentRequestOptions.fromJson(Map<String, dynamic> json) =>
       _$TranslateDocumentRequestOptionsFromJson(json);
 
+  @override
   TranslateDocumentRequestOptions._builder(
-      TranslateDocumentRequestOptionsBuilder builder) {
-    source = builder.source;
+      TranslateDocumentRequestOptionsBuilder builder)
+      : super._builder(builder) {
+    filename = builder.filename;
     outputFormat = builder.outputFormat;
-    formality = builder.formality;
-    glossaryId = builder.glossaryId;
   }
 }
 
 final class TranslateDocumentRequestOptionsBuilder
     extends TranslateRequestBuilder<TranslateDocumentRequestOptions> {
+  TranslateDocumentRequestOptionsBuilder(
+      {required this.filename, required super.target});
+
+  late String filename;
+
   SupportetFileTypes? outputFormat;
 
   @override
@@ -126,44 +164,54 @@ enum SplitSentenceOption {
   all
 }
 
-///
+/// Enum for formality options
+@JsonEnum()
 enum Formality {
   /// Default formality
-  def(apiName: 'default'),
+  @JsonValue('default')
+  def,
 
   /// more
-  more(apiName: 'more'),
+  @JsonValue('more')
+  more,
 
   /// less
-  less(apiName: 'less'),
+  @JsonValue('less')
+  less,
 
   /// prefer more
-  preferMore(apiName: 'prefer_more'),
+  @JsonValue('prefer_more')
+  preferMore,
 
   /// prefer less
-  preferLess(apiName: 'prefer_less');
-
-  const Formality({required this.apiName});
-
-  final String apiName;
+  @JsonValue('prefer_less')
+  preferLess
 }
 
 enum SupportetFileTypes {
-  docx, // - Microsoft Word Document
+  /// Microsoft Word Document
+  docx,
 
-  pptx, // - Microsoft PowerPoint Document
+  // Microsoft PowerPoint Document
+  pptx,
 
-  xlsx, // - Microsoft Excel Document
+  // Microsoft Excel Document
+  xlsx,
 
-  pdf, // - Portable Document Format
+  /// Portable Document
+  pdf,
 
+  /// HTML- Document
   htm,
 
-  html, // - HTML Document
+  // HTML Document
+  html,
 
+  /// Plain Text
   txt, // - Plain Text Document
 
-  xlf, // / xliff - XLIFF Document, version 2.1
+  /// xliff - XLIFF Document, version 2.1
+  xlf,
 
-  srt, //
+  srt
 }
