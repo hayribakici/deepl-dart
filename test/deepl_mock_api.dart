@@ -5,11 +5,10 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
 class DeepLMockApi extends DeepLApi {
-  factory DeepLMockApi.create() {
-    return DeepLMockApi("", client: MockClient(handleRequest));
-  }
+  factory DeepLMockApi.create() =>
+      DeepLMockApi('key', client: MockClient(handleRequest));
 
-  DeepLMockApi(super.key, {super.client}) : super._();
+  DeepLMockApi(super.key, {super.client});
 
   @override
   String get endpoint => 'test/data/v$version';

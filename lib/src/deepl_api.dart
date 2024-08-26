@@ -3,7 +3,7 @@
 
 part of '../deepl.dart';
 
-class DeepLApi {
+abstract class DeepLApi {
   final int version = 2;
   static const String _freeSuffix = ':fx';
 
@@ -15,7 +15,7 @@ class DeepLApi {
   late Languages _languages;
   late Quotas _quotas;
 
-  DeepLApi._(String key, {BaseClient? client}) {
+  DeepLApi(String key, {BaseClient? client}) {
     _key = key;
     _client = client ?? Client();
 
@@ -26,7 +26,8 @@ class DeepLApi {
     _quotas = Quotas(this);
   }
 
-  factory DeepLApi(String key, {BaseClient? client}) =>
+  /// Create an instance with a given [key] and optional [client].
+  factory DeepLApi.fromAuthKey(String key, {BaseClient? client}) =>
       key.endsWith(_freeSuffix)
           ? _DeepLFreeApi(key, client: client)
           : _DeepLProApi(key, client: client);
@@ -87,25 +88,34 @@ class DeepLApi {
     return baseHeaders;
   }
 
-  String get endpoint => '';
+  String get endpoint;
 
+  /// Endpoint regarding translating documents
   Documents get documents => _documents;
+
+  /// Endpoint regarding translating text
   Glossaries get glossary => _glossary;
+
+  /// Endpoint regardinng the user saved glossary
   Translations get translations => _translations;
+
+  /// Endpoint regarding the supported languages
   Languages get languages => _languages;
+
+  /// Endpoint regarding the quotas
   Quotas get quota => _quotas;
 }
 
 class _DeepLFreeApi extends DeepLApi {
   // _DeepLFreeApi(super.key, {super.client});
-  _DeepLFreeApi(super.key, {super.client}) : super._();
+  _DeepLFreeApi(super.key, {super.client}) : super();
 
   @override
   String get endpoint => 'https://api-free.deepl.com/v$version';
 }
 
 class _DeepLProApi extends DeepLApi {
-  _DeepLProApi(super.key, {super.client}) : super._();
+  _DeepLProApi(super.key, {super.client}) : super();
 
   @override
   String get endpoint => 'https://api.deepl.com/v$version';

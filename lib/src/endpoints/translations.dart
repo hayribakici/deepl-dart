@@ -24,6 +24,7 @@ class Translations extends DeepLEndpoint {
     return tJson.map((json) => Translation.fromJson(json));
   }
 
+  /// Uploads and translates a document's [filename] with given [targetLanguage].
   Future<DocumentStatus> translateDocument(String filename,
       {required TargetLanguage targetLanguage}) async {
     var document =

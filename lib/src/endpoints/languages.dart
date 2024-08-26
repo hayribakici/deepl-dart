@@ -9,6 +9,7 @@ class Languages extends DeepLEndpoint {
 
   Languages(super.api);
 
+  /// Returns supoorted languages
   Future<Iterable<Language>> supportedLanguages() async =>
       _handleList(_path, fromJson: Language.fromJson);
 }

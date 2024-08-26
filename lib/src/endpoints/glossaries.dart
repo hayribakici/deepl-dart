@@ -11,8 +11,8 @@ class Glossaries extends DeepLEndpoint {
 
   /// Retrieve the list of [LanguagePair]s supported by the glossary feature.
   Future<Iterable<LanguagePair>> supportedLanguagePairs() async =>
-      _handleList('glossary-language-pairs', jsonKey: 'supported_languages',
-          fromJson: LanguagePair.fromJson);
+      _handleList('glossary-language-pairs',
+          jsonKey: 'supported_languages', fromJson: LanguagePair.fromJson);
 
   /// Creates a [Glossary]
   Future<Glossary> create(

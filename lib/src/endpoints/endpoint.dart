@@ -19,16 +19,19 @@ abstract class DeepLEndpoint {
           {Map<String, String>? headers}) async =>
       _api._post(path, body, headers: headers);
 
-
-  Future<T> _handleGet<T>(String path, {required Function(Map<String, dynamic>) fromJson}) async {
+  Future<T> _handleGet<T>(String path,
+      {required Function(Map<String, dynamic>) fromJson}) async {
     String jsonString = await _get(path);
     return fromJson(jsonDecode(jsonString));
   }
 
-  Future<Iterable<T>> _handleList<T>(String path, {String? jsonKey, required Function(Map<String, dynamic>) fromJson}) async {
+  Future<Iterable<T>> _handleList<T>(String path,
+      {String? jsonKey,
+      required Function(Map<String, dynamic>) fromJson}) async {
     String jsonString = await _get(path);
     var decode = jsonDecode(jsonString);
-    var tJson = (jsonKey != null ? decode[jsonKey] : decode) as Iterable<dynamic>;
+    var tJson =
+        (jsonKey != null ? decode[jsonKey] : decode) as Iterable<dynamic>;
     return tJson.map((json) => fromJson(json));
   }
 }
