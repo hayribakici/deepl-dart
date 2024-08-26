@@ -29,8 +29,8 @@ for (var glossary in glossaries) {
 ### Supported endpoints
 
 - [] translating documents
-- x[] translating text
-- x[] glossaries
+- [x] translating text
+- [x] glossaries
 - [x] tranlation quota
 
 
