@@ -237,6 +237,7 @@ DocumentStatus _$DocumentStatusFromJson(Map<String, dynamic> json) =>
       ..documentId = json['document_id'] as String?
       ..translationStatus =
           $enumDecodeNullable(_$TranslationStatusEnumMap, json['status'])
+      ..secondsRemaining = json['seconds_remaining'] as int?
       ..billedCharacters = json['billed_characters'] as int?
       ..errorMessage = json['error_message'] as String?;
 

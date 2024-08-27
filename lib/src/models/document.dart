@@ -15,9 +15,18 @@ class DocumentStatus {
   @JsonKey(name: 'status')
   TranslationStatus? translationStatus;
 
+  /// Estimated number of seconds until the translation is done.
+  /// This parameter is only included while [translationStatus] is [TranslationStatus.translating].
+  @JsonKey(name: 'seconds_remaining')
+  int? secondsRemaining;
+
+  /// The number of characters billed to your account.
+  /// The characters will only be billed after a successful download request.
   @JsonKey(name: 'billed_characters')
   int? billedCharacters;
 
+  /// A short description of the error, if available. Note that the content is subject to change.
+  /// This parameter may be included if an error occurred during translation.
   @JsonKey(name: 'error_message')
   String? errorMessage;
 
