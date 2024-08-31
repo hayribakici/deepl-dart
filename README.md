@@ -1,5 +1,3 @@
-!This library is a work in progress!
-
 # deepl-dart
 
 This is an inofficial library that accesses the [DeepL API](https://developers.deepl.com/docs).
@@ -28,6 +26,34 @@ var translation = (await deepl.translations.translateText(
       .first;
   print(
       'Detected language: ${translation.detectedLanguage?.name}, translation: ${translation.text}');
+```
+
+#### Translating Documents
+
+To translate a document, you must first upload it with
+
+```dart
+var document = await deepl.documents.uploadDocument(
+    options: TranslateDocumentRequestOptionsBuilder(
+      filename: '<your_filename>',
+      target: TargetLanguage.ES,
+    ).build(),
+  ));
+```
+
+If it is a large document, you could check its translation status with
+
+```dart
+var status = await deepl.document.status(document);
+print('Status: ${status.key}'');
+// works only if `status.key == TranslationStatus.translating`
+print('Estd. seconds: ${(status.value as StatusTranslating).estimatedSeconds}');
+```
+
+and finally download it with
+
+```dart
+var file = await deepl.document.downloadDocument(document, '<your_translated_filename>');
 ```
 
 ### Supported endpoints
