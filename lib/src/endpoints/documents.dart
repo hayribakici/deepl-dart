@@ -40,41 +40,19 @@ class Documents extends DeepLEndpoint {
     return MapEntry(dStatus.translationStatus!, dStatus);
   }
 
-  Future<List<int>> downloadDocument(Document document) async {
+  /// Downloads the translated [document] and saves it into [filename].
+  /// Returns the created [File] reference.
+  Future<File> downloadDocument(Document document, String filename) async {
     var response = await _api._postRaw('$_path/${document.documentId}/result',
         jsonEncode({'document_key': document.documentKey}));
-    return response.bodyBytes;
+    var bytes = response.bodyBytes;
+    return File(filename).writeAsBytes(bytes);
   }
 
-  Stream<int> _timedCounter(Duration interval, [int? maxCount]) {
-    late StreamController<int> controller;
-    Timer? timer;
-    int counter = 0;
-
-    void tick(_) {
-      counter++;
-      controller.add(counter); // Ask stream to send counter values as event.
-      if (counter == maxCount) {
-        timer?.cancel();
-        controller.close(); // Ask stream to shut down and tell listeners.
-      }
-    }
-
-    void startTimer() {
-      timer = Timer.periodic(interval, tick);
-    }
-
-    void stopTimer() {
-      timer?.cancel();
-      timer = null;
-    }
-
-    controller = StreamController<int>(
-        onListen: startTimer,
-        onPause: stopTimer,
-        onResume: startTimer,
-        onCancel: stopTimer);
-
-    return controller.stream;
-  }
+// TODO streamline document translation
+  // Stream<DocumentStatus> translateDocument(TranslateDocumentRequestOptions options) {
+  //   Stream.fromFuture(uploadDocument(options: options))
+  //   .asyncMap((document) => status(document))
+  //   .
+  // }
 }

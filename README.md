@@ -35,7 +35,7 @@ var translation = (await deepl.translations.translateText(
 - [x] Translating documents
   - [x] Pploading files
   - [x] Checking file status
-  - [ ] Downloading document
+  - [x] Downloading document
 - [x] Translating text
 - [x] Glossaries
 - [x] Tranlation quota
