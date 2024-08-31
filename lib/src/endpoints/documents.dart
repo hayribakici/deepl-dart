@@ -3,7 +3,7 @@
 
 part of '../../deepl.dart';
 
-///
+/// Endpoint for requesting document translation.
 class Documents extends DeepLEndpoint {
   Documents(super.api);
 

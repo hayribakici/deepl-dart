@@ -3,7 +3,7 @@
 
 part of '../../deepl.dart';
 
-/// Endpoint for calling the translation API
+/// Endpoint for handling text translations.
 class Translations extends DeepLEndpoint {
   @override
   String get _path => 'translate';
@@ -20,22 +20,4 @@ class Translations extends DeepLEndpoint {
     var tJson = jsonDecode(jsonString)['translations'] as Iterable<dynamic>;
     return tJson.map((json) => Translation.fromJson(json));
   }
-
-  /// Uploads and translates a document's with givenn [options].
-  // Future<> translateDocument(
-  //     {required TranslateDocumentRequestOptions options, StreamSubscription<int>? subscription}) async {
-  //   var document = await _api.documents.uploadDocument(options: options);
-  //   var status = await _api.documents.status(document);
-  //   if (status.translationStatus == TranslationStatus.translating && subscription != null) {
-  //     if (status.secondsRemaining != null) {
-  //       var controller = timedCounter(Duration(seconds: 1), status.secondsRemaining);
-  //       controller.listen();
-  //     }
-  //   }
-  // return Stream.fromFutures([document, _api.documents.status(document)]);
-
-  // if (status.translationStatus == TranslationStatus.translating)
-  //   Future.delayed(Duration(seconds: status?.secondsRemaining)).then((value) => null);
-
-  //   } else
 }

@@ -3,6 +3,7 @@
 
 part of '../../deepl.dart';
 
+/// Endppoint for handling glossary related functions.
 class Glossaries extends DeepLEndpoint {
   @override
   String get _path => 'glossaries';

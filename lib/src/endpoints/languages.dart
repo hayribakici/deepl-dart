@@ -3,6 +3,7 @@
 
 part of '../../deepl.dart';
 
+/// Endpoint for language functionalities.
 class Languages extends DeepLEndpoint {
   @override
   String get _path => '/languages';
