@@ -21,10 +21,21 @@ class Translations extends DeepLEndpoint {
     return tJson.map((json) => Translation.fromJson(json));
   }
 
-  /// Uploads and translates a document's [filename] with given [targetLanguage].
-  Future<DocumentStatus> translateDocument(
-      {required TranslateDocumentRequestOptions options}) async {
-    var document = await _api.documents.uploadDocument(options: options);
-    return _api.documents.status(document);
-  }
+  /// Uploads and translates a document's with givenn [options].
+  // Future<> translateDocument(
+  //     {required TranslateDocumentRequestOptions options, StreamSubscription<int>? subscription}) async {
+  //   var document = await _api.documents.uploadDocument(options: options);
+  //   var status = await _api.documents.status(document);
+  //   if (status.translationStatus == TranslationStatus.translating && subscription != null) {
+  //     if (status.secondsRemaining != null) {
+  //       var controller = timedCounter(Duration(seconds: 1), status.secondsRemaining);
+  //       controller.listen();
+  //     }
+  //   }
+  // return Stream.fromFutures([document, _api.documents.status(document)]);
+
+  // if (status.translationStatus == TranslationStatus.translating)
+  //   Future.delayed(Duration(seconds: status?.secondsRemaining)).then((value) => null);
+
+  //   } else
 }

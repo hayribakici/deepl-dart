@@ -232,14 +232,10 @@ Glossary _$GlossaryFromJson(Map<String, dynamic> json) => Glossary()
       : DateTime.parse(json['creation_time'] as String)
   ..entryCount = json['entry_count'] as int?;
 
-DocumentStatus _$DocumentStatusFromJson(Map<String, dynamic> json) =>
-    DocumentStatus()
-      ..documentId = json['document_id'] as String?
-      ..translationStatus =
-          $enumDecodeNullable(_$TranslationStatusEnumMap, json['status'])
-      ..secondsRemaining = json['seconds_remaining'] as int?
-      ..billedCharacters = json['billed_characters'] as int?
-      ..errorMessage = json['error_message'] as String?;
+StatusQueued _$StatusQueuedFromJson(Map<String, dynamic> json) => StatusQueued()
+  ..documentId = json['document_id'] as String?
+  ..translationStatus =
+      $enumDecodeNullable(_$TranslationStatusEnumMap, json['status']);
 
 const _$TranslationStatusEnumMap = {
   TranslationStatus.queued: 'queued',
@@ -247,6 +243,25 @@ const _$TranslationStatusEnumMap = {
   TranslationStatus.done: 'done',
   TranslationStatus.error: 'error',
 };
+
+StatusTranslating _$StatusTranslatingFromJson(Map<String, dynamic> json) =>
+    StatusTranslating()
+      ..documentId = json['document_id'] as String?
+      ..translationStatus =
+          $enumDecodeNullable(_$TranslationStatusEnumMap, json['status'])
+      ..secondsRemaining = json['seconds_remaining'] as int?;
+
+StatusDone _$StatusDoneFromJson(Map<String, dynamic> json) => StatusDone()
+  ..documentId = json['document_id'] as String?
+  ..translationStatus =
+      $enumDecodeNullable(_$TranslationStatusEnumMap, json['status'])
+  ..billedCharacters = json['billed_characters'] as int?;
+
+StatusError _$StatusErrorFromJson(Map<String, dynamic> json) => StatusError()
+  ..documentId = json['document_id'] as String?
+  ..translationStatus =
+      $enumDecodeNullable(_$TranslationStatusEnumMap, json['status'])
+  ..errorMessage = json['error_message'] as String?;
 
 Document _$DocumentFromJson(Map<String, dynamic> json) => Document(
       json['document_id'] as String,

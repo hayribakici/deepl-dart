@@ -3,6 +3,7 @@
 
 library deepl;
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:core';

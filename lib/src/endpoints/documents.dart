@@ -28,16 +28,53 @@ class Documents extends DeepLEndpoint {
     return Document.fromJson(jsonDecode(result));
   }
 
-  /// Retrieve the [DocumentStatus] of the [documentId] and [documentKey]
-  Future<DocumentStatus> status(Document document) async {
+  /// Retrieve the [DocumentStatus] of the [document].
+  ///
+  /// The [DocumentStatus] can be either [StatusQueued], [StatusTranslating], [StatusDone] or
+  /// [StatusError] based on the [TranslationStatus].s
+  Future<MapEntry<TranslationStatus, DocumentStatus>> status<T>(
+      Document document) async {
     var jsonResponse = await _post('$_path/${document.documentId}',
         jsonEncode({'document_key': document.documentKey}));
-    return DocumentStatus.fromJson(jsonDecode(jsonResponse));
+    var dStatus = DocumentStatus.fromJson(jsonDecode(jsonResponse));
+    return MapEntry(dStatus.translationStatus!, dStatus);
   }
 
   Future<List<int>> downloadDocument(Document document) async {
     var response = await _api._postRaw('$_path/${document.documentId}/result',
         jsonEncode({'document_key': document.documentKey}));
     return response.bodyBytes;
+  }
+
+  Stream<int> _timedCounter(Duration interval, [int? maxCount]) {
+    late StreamController<int> controller;
+    Timer? timer;
+    int counter = 0;
+
+    void tick(_) {
+      counter++;
+      controller.add(counter); // Ask stream to send counter values as event.
+      if (counter == maxCount) {
+        timer?.cancel();
+        controller.close(); // Ask stream to shut down and tell listeners.
+      }
+    }
+
+    void startTimer() {
+      timer = Timer.periodic(interval, tick);
+    }
+
+    void stopTimer() {
+      timer?.cancel();
+      timer = null;
+    }
+
+    controller = StreamController<int>(
+        onListen: startTimer,
+        onPause: stopTimer,
+        onResume: startTimer,
+        onCancel: stopTimer);
+
+    return controller.stream;
   }
 }

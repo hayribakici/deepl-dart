@@ -32,7 +32,7 @@ void main(List<String> args) async {
   print('key: ${id.documentId} ${id.documentKey}');
   Future.delayed(Duration(seconds: 3), () async {
     var status = (await deepl.documents.status(id));
-    print(status.translationStatus);
+    print(status.key);
   });
 }
 

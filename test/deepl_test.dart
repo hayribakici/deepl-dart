@@ -93,20 +93,52 @@ void main() {
     });
   });
 
-  // group('documents', () {
-  // test('translate document', () async {
-  //   deepl = DeepLMockApi.streaming();
-  //   interceptor = (method, url, headers, [body]) {
-  //     print(body);
-  //   };
-  //   var t = await deepl.documents.uploadDocument(
-  //       options: TranslateDocumentRequestOptionsBuilder(
-  //               filename: '${Directory.current.path}/example/translate.txt',
-  //               target: TargetLanguage.ES)
-  //           .build());
-  //   expect(t, isNotNull);
-  // });
-  // });
+  group('documents', () {
+    // test('translate document', () async {
+    //   deepl = DeepLMockApi.streaming();
+    //   interceptor = (method, url, headers, [body]) {
+    //     print(body);
+    //   };
+    //   var t = await deepl.documents.uploadDocument(
+    //       options: TranslateDocumentRequestOptionsBuilder(
+    //               filename: '${Directory.current.path}/example/translate.txt',
+    //               target: TargetLanguage.ES)
+    //           .build());
+    //   expect(t, isNotNull);
+    // });
+
+    group('status', () {
+      test('status queued', () async {
+        var s = await deepl.documents.status(Document('123_queued', 'key'));
+        expect(s.key, TranslationStatus.queued);
+        expect(s.value, isA<StatusQueued>());
+      });
+      test('status translating', () async {
+        var s =
+            await deepl.documents.status(Document('123_translating', 'key'));
+        expect(s.key, TranslationStatus.translating);
+        expect(s.value, isA<StatusTranslating>());
+        var v = s.value as StatusTranslating;
+        expect(v.secondsRemaining, 1337);
+      });
+
+      test('status done', () async {
+        var s = await deepl.documents.status(Document('123_done', 'key'));
+        expect(s.key, TranslationStatus.done);
+        expect(s.value, isA<StatusDone>());
+        var v = s.value as StatusDone;
+        expect(v.billedCharacters, 1337);
+      });
+
+      test('status error', () async {
+        var s = await deepl.documents.status(Document('123_error', 'key'));
+        expect(s.key, TranslationStatus.error);
+        expect(s.value, isA<StatusError>());
+        var v = s.value as StatusError;
+        expect(v.errorMessage, 'Only');
+      });
+    });
+  });
 
   group('quota', () {
     test('get', () async {
