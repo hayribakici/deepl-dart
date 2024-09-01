@@ -41,6 +41,8 @@ class StatusQueued extends DocumentStatus {
 class StatusTranslating extends DocumentStatus {
   StatusTranslating();
 
+  StatusTranslating.fromRemainingSeconds(this.secondsRemaining);
+
   /// Estimated number of seconds until the translation is done.
   /// This parameter is only included while [translationStatus] is [TranslationStatus.translating].
   @JsonKey(name: 'seconds_remaining')
@@ -58,6 +60,9 @@ class StatusDone extends DocumentStatus {
   /// The characters will only be billed after a successful download request.
   @JsonKey(name: 'billed_characters')
   int? billedCharacters;
+
+  /// The file
+  File? file;
 
   factory StatusDone.fromJson(Map<String, dynamic> json) =>
       _$StatusDoneFromJson(json);

@@ -22,6 +22,31 @@ void main(List<String> args) async {
       .first;
   print(
       'Detected language: ${translation.detectedLanguage?.name}, translation: ${translation.text}');
+  // await translateDocumentManual(deepl);
+  var curr = Directory.current.path;
+  deepl.documents
+      .translateDocument(TranslateDocumentRequestOptionsBuilder(
+    filename: '$curr/example/gatsby.txt',
+    target: TargetLanguage.ES,
+  ).build())
+      .listen((event) {
+    print('Listening...');
+    switch (event.runtimeType) {
+      case StatusQueued:
+        print('Queued');
+        break;
+      case StatusTranslating:
+        stdout.write('Translating...');
+        stdout.write('\r${(event as StatusTranslating).secondsRemaining}s');
+        break;
+      case StatusDone:
+        print('Downloading Document');
+        print('Done');
+    }
+  });
+}
+
+Future<void> translateDocumentManual(DeepLApi deepl) async {
   var curr = Directory.current.path;
   print('Uploading document $curr/example/gatsby.txt');
   var id = (await deepl.documents.uploadDocument(
