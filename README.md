@@ -76,7 +76,7 @@ var curr = Directory.current.path;
         print('Queued');
         break;
       case StatusTranslating:
-        stdout.write('\r${(event as StatusTranslating).secondsRemaining}s');
+        print('${(event as StatusTranslating).secondsRemaining}s');
         break;
       case StatusDone:
         print('Done');
