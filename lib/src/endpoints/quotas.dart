@@ -3,6 +3,7 @@
 
 part of '../../deepl.dart';
 
+/// Endpoint for the API usage.
 class Quotas extends DeepLEndpoint {
   @override
   String get _path => 'usage';

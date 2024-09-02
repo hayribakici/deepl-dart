@@ -56,12 +56,40 @@ and finally download it with
 var file = await deepl.document.downloadDocument(document, '<your_translated_filename>');
 ```
 
+##### Translating as a stream
+
+There is also a more streamlined approach when translating a document.
+
+The filename is contained in the `options`. The translated document will be stored in the same directory as the original and will be named with the `TargetLanguage` filename suffix (e.g. gatsby_ES.txt).
+
+```dart
+var curr = Directory.current.path;
+  deepl.documents
+      .translateDocument(
+          options: TranslateDocumentRequestOptionsBuilder(
+    filename: '$curr/example/gatsby.txt',
+    target: TargetLanguage.ES,
+  ).build())
+      .listen((event) {
+    switch (event.runtimeType) {
+      case StatusQueued:
+        print('Queued');
+        break;
+      case StatusTranslating:
+        stdout.write('\r${(event as StatusTranslating).secondsRemaining}s');
+        break;
+      case StatusDone:
+        print('Done');
+    }
+  });
+```
+
 ### Supported endpoints
 
-- [x] Translating documents
+- [x] Translating documents (`deepl.documents`)
   - [x] Pploading files
   - [x] Checking file status
   - [x] Downloading document
-- [x] Translating text
-- [x] Glossaries
-- [x] Tranlation quota
+- [x] Translating text (`deepl.translate`)
+- [x] Glossaries (`deepl.glossaries`)
+- [x] Tranlation quota (`deepl.quota`)

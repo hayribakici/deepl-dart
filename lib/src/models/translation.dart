@@ -33,9 +33,7 @@ abstract class TranslateRequestOptions<T extends TranslateRequestBuilder> {
   @JsonKey(name: 'target_lang')
   late TargetLanguage target;
 
-  @JsonKey(
-    name: 'formality',
-  )
+  @JsonKey(name: 'formality')
   Formality formality = Formality.def;
 
   @JsonKey(name: 'glossary_id', includeIfNull: false)
@@ -96,7 +94,7 @@ abstract class TranslateRequestBuilder<T> {
 /// Builder class for [TranslateTextRequestOptions]
 final class TranslateTextRequestOptionsBuilder
     extends TranslateRequestBuilder<TranslateTextRequestOptions> {
-  TranslateTextRequestOptionsBuilder.simple(
+  TranslateTextRequestOptionsBuilder.single(
       {required String text, required TargetLanguage target})
       : this(text: [text], target: target);
 

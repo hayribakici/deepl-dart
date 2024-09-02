@@ -10,7 +10,7 @@ class Translations extends DeepLEndpoint {
 
   Translations(super.api);
 
-  /// Translates text with a given target language with given [options].
+  /// Translates text with given [options]. Returns
   ///
   /// Build [options] with the [TranslateTextRequestOptionsBuilder].
   Future<Iterable<Translation>> translateText(
@@ -20,4 +20,11 @@ class Translations extends DeepLEndpoint {
     var tJson = jsonDecode(jsonString)['translations'] as Iterable<dynamic>;
     return tJson.map((json) => Translation.fromJson(json));
   }
+
+  /// Translates text with given [options]. Returns
+  ///
+  /// Build [options] with the [TranslateTextRequestOptionsBuilder.single].
+  Future<Translation> translateSingleText(
+          {required TranslateTextRequestOptions options}) async =>
+      (await translateText(options: options)).first;
 }

@@ -49,41 +49,22 @@ class Documents extends DeepLEndpoint {
     return File(filename).writeAsBytes(bytes);
   }
 
-  Stream<DocumentStatus> _countDownStream(StatusTranslating document) {
-    late StreamController<DocumentStatus> controller;
-    Timer? timer;
-    int remaining = document.secondsRemaining ?? 0;
-
-    void tick(_) {
-      --remaining;
-      controller.add(
-        StatusTranslating.fromRemainingSeconds(remaining),
-      ); // Ask stream to send counter values as event.
-      if (remaining <= 0) {
-        timer?.cancel();
-      }
-    }
-
-    void startTimer() {
-      timer = Timer.periodic(Duration(seconds: remaining), tick);
-    }
-
-    void stopTimer() {
-      timer?.cancel();
-      timer = null;
-    }
-
-    controller = StreamController<DocumentStatus>(
-        onListen: startTimer,
-        onPause: stopTimer,
-        onResume: startTimer,
-        onCancel: stopTimer);
-
-    return controller.stream;
-  }
-
+  /// Uploads, translates and downloads a document and returns
+  /// a [Stream] emittinng the following:
+  ///
+  /// * [StatusQueued] when the translation is queued from the translation machine
+  /// * [StatusTranslating] when the translation is in progress.
+  ///    Based on the [StatusTranslating.secondsRemaining], this method emits every
+  ///    second until `0`.
+  /// * [StatusError] when an error occured
+  /// * [StatusDone] when the translation machine finished translating resulting in
+  ///    file download. The dowloaded [File] is stored in this status.
+  ///
+  /// The filename is contained in the [options]. The translated document
+  /// will be stored in the same directory as the original and will be named
+  /// with the [TargetLanguage] filename suffix (e.g. gatsby_ES.txt).
   Stream<DocumentStatus> translateDocument(
-      TranslateDocumentRequestOptions options) async* {
+      {required TranslateDocumentRequestOptions options}) async* {
     var document = await uploadDocument(options: options);
     var entry = await status(document);
 
@@ -97,6 +78,7 @@ class Documents extends DeepLEndpoint {
           entry = await status(document);
         case TranslationStatus.translating:
           yield documentStatus as StatusTranslating;
+          // firing StatusTranslating with seconds remaining as a timer.
           var remaining = documentStatus.secondsRemaining ?? 0;
           for (var i = remaining; i >= 0; --i) {
             await Future.delayed(Duration(seconds: 1));
@@ -108,13 +90,15 @@ class Documents extends DeepLEndpoint {
           throw DeepLException(
               (documentStatus as StatusError).errorMessage ?? 'Error');
         default:
+          break;
       }
     }
     var done = (entry.value) as StatusDone;
     var split = options.filename.split('/');
-    var path = split[-2];
-    var filename = split.last;
-    var ext = filename.split('.').last;
+    var path = split[split.length - 2];
+    var filenameExt = split.last.split('.');
+    var filename = filenameExt.first;
+    var ext = filenameExt.last;
     var newFilename = '${filename}_${options.target.name}.$ext';
     var f = await downloadDocument(document, '$path/$newFilename');
     done.file = f;

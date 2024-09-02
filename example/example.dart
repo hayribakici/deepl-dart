@@ -14,7 +14,7 @@ void main(List<String> args) async {
   var t = TargetLanguage.ES;
   print('Translating \'$h\' to ${t.name}:');
   var translation = (await deepl.translations.translateText(
-    options: TranslateTextRequestOptionsBuilder.simple(
+    options: TranslateTextRequestOptionsBuilder.single(
       text: 'Hello',
       target: TargetLanguage.ES,
     ).build(),
@@ -23,20 +23,23 @@ void main(List<String> args) async {
   print(
       'Detected language: ${translation.detectedLanguage?.name}, translation: ${translation.text}');
   // await translateDocumentManual(deepl);
+  // translateDocumentStream(deepl);
+}
+
+void translateDocumentStream(DeepLApi deepl) {
   var curr = Directory.current.path;
   deepl.documents
-      .translateDocument(TranslateDocumentRequestOptionsBuilder(
+      .translateDocument(
+          options: TranslateDocumentRequestOptionsBuilder(
     filename: '$curr/example/gatsby.txt',
     target: TargetLanguage.ES,
   ).build())
       .listen((event) {
-    print('Listening...');
     switch (event.runtimeType) {
       case StatusQueued:
         print('Queued');
         break;
       case StatusTranslating:
-        stdout.write('Translating...');
         stdout.write('\r${(event as StatusTranslating).secondsRemaining}s');
         break;
       case StatusDone:

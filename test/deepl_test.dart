@@ -80,7 +80,7 @@ void main() {
             '{"target_lang":"ES","formality":"default","text":["hello"],"context":null,"split_sentence_option":"keep","preserve_formatting":false}');
       };
       var translated = await deepl.translations.translateText(
-        options: TranslateTextRequestOptionsBuilder.simple(
+        options: TranslateTextRequestOptionsBuilder.single(
           text: 'hello',
           target: TargetLanguage.ES,
         ).build(),
