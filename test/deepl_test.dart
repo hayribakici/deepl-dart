@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:deepl/deepl.dart';
 import 'package:deepl/src/models/_models.dart';
 import 'package:test/test.dart';
