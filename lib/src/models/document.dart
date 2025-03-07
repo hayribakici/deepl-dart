@@ -52,7 +52,7 @@ class StatusTranslating extends DocumentStatus {
       _$StatusTranslatingFromJson(json);
 }
 
-@JsonSerializable(createToJson: false)
+@JsonSerializable(createToJson: false, ignoreUnannotated: true)
 class StatusDone extends DocumentStatus {
   StatusDone();
 
@@ -61,8 +61,8 @@ class StatusDone extends DocumentStatus {
   @JsonKey(name: 'billed_characters')
   int? billedCharacters;
 
-  /// The file
-  File? file;
+  /// The the full filename of the downloaded file
+  late String filename;
 
   factory StatusDone.fromJson(Map<String, dynamic> json) =>
       _$StatusDoneFromJson(json);
@@ -111,5 +111,5 @@ class DocumentTranslationStatusTranslating extends DocumentTranslationStatus {
 
 class DocumentTranslationStatusQueued extends DocumentTranslationStatus {}
 
-/// Document tranlation statuss
+/// Document tranlation status
 enum TranslationStatus { queued, translating, done, error }

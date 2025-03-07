@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:deepl/deepl.dart';
 import 'package:deepl/src/models/_models.dart';
 import 'package:test/test.dart';
@@ -156,6 +158,25 @@ void main() {
       expect(supported.first.sourceLang, SourceLanguage.BG);
       expect(supported.first.name, 'Bulgarian');
       expect(supported.first.supportsFormality, false);
+    });
+  });
+
+  group('improvements', () {
+    test('improve text', () async {
+      interceptor = (method, url, headers, [body]) {
+        expect(method, 'POST');
+        expect(body, isNotNull);
+        expect(body,
+            '{"target_lang":"EN_US","text":["I could relly use sum help with edits on this text !"],"writing_style":null,"tone":null}');
+      };
+      var improve = await deepl.improvements.improveText(
+          options: TextImprovementRequestOptionsBuilder(
+                  text: "I could relly use sum help with edits on this text !",
+                  target: TargetLanguage.EN_US)
+              .build());
+      expect(improve.isEmpty, false);
+      expect(improve.first.text,
+          "I could really use some help with editing this text!");
     });
   });
 }

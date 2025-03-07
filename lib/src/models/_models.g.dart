@@ -90,9 +90,9 @@ Translation _$TranslationFromJson(Map<String, dynamic> json) => Translation()
 TranslateTextRequestOptions _$TranslateTextRequestOptionsFromJson(
         Map<String, dynamic> json) =>
     TranslateTextRequestOptions()
+      ..target = $enumDecode(_$TargetLanguageEnumMap, json['target_lang'])
       ..source =
           $enumDecodeNullable(_$SourceLanguageEnumMap, json['source_lang'])
-      ..target = $enumDecode(_$TargetLanguageEnumMap, json['target_lang'])
       ..formality = $enumDecode(_$FormalityEnumMap, json['formality'])
       ..glossaryId = json['glossary_id'] as String?
       ..text = (json['text'] as List<dynamic>).map((e) => e as String).toList()
@@ -103,7 +103,9 @@ TranslateTextRequestOptions _$TranslateTextRequestOptionsFromJson(
 
 Map<String, dynamic> _$TranslateTextRequestOptionsToJson(
     TranslateTextRequestOptions instance) {
-  final val = <String, dynamic>{};
+  final val = <String, dynamic>{
+    'target_lang': _$TargetLanguageEnumMap[instance.target]!,
+  };
 
   void writeNotNull(String key, dynamic value) {
     if (value != null) {
@@ -112,7 +114,6 @@ Map<String, dynamic> _$TranslateTextRequestOptionsToJson(
   }
 
   writeNotNull('source_lang', _$SourceLanguageEnumMap[instance.source]);
-  val['target_lang'] = _$TargetLanguageEnumMap[instance.target]!;
   val['formality'] = _$FormalityEnumMap[instance.formality]!;
   writeNotNull('glossary_id', instance.glossaryId);
   val['text'] = instance.text;
@@ -162,7 +163,7 @@ const _$TargetLanguageEnumMap = {
 };
 
 const _$FormalityEnumMap = {
-  Formality.def: 'default',
+  Formality.defaultFormality: 'default',
   Formality.more: 'more',
   Formality.less: 'less',
   Formality.preferMore: 'prefer_more',
@@ -178,9 +179,9 @@ const _$SplitSentenceOptionEnumMap = {
 TranslateDocumentRequestOptions _$TranslateDocumentRequestOptionsFromJson(
         Map<String, dynamic> json) =>
     TranslateDocumentRequestOptions()
+      ..target = $enumDecode(_$TargetLanguageEnumMap, json['target_lang'])
       ..source =
           $enumDecodeNullable(_$SourceLanguageEnumMap, json['source_lang'])
-      ..target = $enumDecode(_$TargetLanguageEnumMap, json['target_lang'])
       ..formality = $enumDecode(_$FormalityEnumMap, json['formality'])
       ..glossaryId = json['glossary_id'] as String?
       ..filename = json['filename'] as String
@@ -189,7 +190,9 @@ TranslateDocumentRequestOptions _$TranslateDocumentRequestOptionsFromJson(
 
 Map<String, dynamic> _$TranslateDocumentRequestOptionsToJson(
     TranslateDocumentRequestOptions instance) {
-  final val = <String, dynamic>{};
+  final val = <String, dynamic>{
+    'target_lang': _$TargetLanguageEnumMap[instance.target]!,
+  };
 
   void writeNotNull(String key, dynamic value) {
     if (value != null) {
@@ -198,7 +201,6 @@ Map<String, dynamic> _$TranslateDocumentRequestOptionsToJson(
   }
 
   writeNotNull('source_lang', _$SourceLanguageEnumMap[instance.source]);
-  val['target_lang'] = _$TargetLanguageEnumMap[instance.target]!;
   val['formality'] = _$FormalityEnumMap[instance.formality]!;
   writeNotNull('glossary_id', instance.glossaryId);
   val['filename'] = instance.filename;
@@ -270,3 +272,60 @@ Document _$DocumentFromJson(Map<String, dynamic> json) => Document(
 
 DeepLError _$DeepLErrorFromJson(Map<String, dynamic> json) =>
     DeepLError()..message = json['message'] as String?;
+
+TextImprovement _$TextImprovementFromJson(Map<String, dynamic> json) =>
+    TextImprovement()
+      ..text = json['text'] as String?
+      ..targetLanguage = $enumDecodeNullable(
+          _$TargetLanguageEnumMap, json['target_language'],
+          unknownValue: TargetLanguage.unknown)
+      ..detectedSourceLanguage = $enumDecodeNullable(
+          _$SourceLanguageEnumMap, json['detected_source_language'],
+          unknownValue: SourceLanguage.unknown);
+
+TextImprovmentRequestOptions _$TextImprovmentRequestOptionsFromJson(
+        Map<String, dynamic> json) =>
+    TextImprovmentRequestOptions(
+      text: (json['text'] as List<dynamic>).map((e) => e as String).toList(),
+    )
+      ..target = $enumDecode(_$TargetLanguageEnumMap, json['target_lang'])
+      ..writingStyle = $enumDecodeNullable(
+              _$WritingStyleEnumMap, json['writing_style'],
+              unknownValue: WritingStyle.defaultStyle) ??
+          WritingStyle.defaultStyle
+      ..tone = $enumDecodeNullable(_$ToneEnumMap, json['tone'],
+              unknownValue: Tone.defaultTone) ??
+          Tone.defaultTone;
+
+Map<String, dynamic> _$TextImprovmentRequestOptionsToJson(
+        TextImprovmentRequestOptions instance) =>
+    <String, dynamic>{
+      'target_lang': _$TargetLanguageEnumMap[instance.target]!,
+      'text': instance.text,
+      'writing_style': _$WritingStyleEnumMap[instance.writingStyle],
+      'tone': _$ToneEnumMap[instance.tone],
+    };
+
+const _$WritingStyleEnumMap = {
+  WritingStyle.simple: 'simple',
+  WritingStyle.buisiness: 'buisiness',
+  WritingStyle.academic: 'academic',
+  WritingStyle.casual: 'casual',
+  WritingStyle.defaultStyle: 'defaultStyle',
+  WritingStyle.preferSimple: 'prefer_simple',
+  WritingStyle.preferBusiness: 'prefer_business',
+  WritingStyle.preferAcademic: 'prefer_academic',
+  WritingStyle.preferCasual: 'prefer_casual',
+};
+
+const _$ToneEnumMap = {
+  Tone.enthusiastic: 'enthusiastic',
+  Tone.friendly: 'friendly',
+  Tone.confident: 'confident',
+  Tone.diplomatic: 'diplomatic',
+  Tone.defaultTone: 'defaultTone',
+  Tone.preferEnthusiastic: 'prefer_enthusiastic',
+  Tone.preferFriendly: 'prefer_friendly',
+  Tone.preferConfident: 'prefer_confident',
+  Tone.preferDiplomatic: 'prefer_diplomatic',
+};

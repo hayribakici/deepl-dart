@@ -16,3 +16,5 @@ part 'translation.dart';
 part 'glossary.dart';
 part 'document.dart';
 part 'error.dart';
+part 'textimprovement.dart';
+part 'utils.dart';

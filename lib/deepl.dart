@@ -3,7 +3,6 @@
 
 library deepl;
 
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:core';
@@ -11,6 +10,7 @@ import 'dart:core';
 import 'package:csv/csv.dart';
 import 'package:deepl/src/models/_models.dart';
 import 'package:http/http.dart';
+import 'package:path/path.dart';
 
 part 'src/deepl_api.dart';
 part 'src/deepl_error.dart';
@@ -20,3 +20,4 @@ part 'src/endpoints/languages.dart';
 part 'src/endpoints/glossaries.dart';
 part 'src/endpoints/translations.dart';
 part 'src/endpoints/quotas.dart';
+part 'src/endpoints/improvements.dart';

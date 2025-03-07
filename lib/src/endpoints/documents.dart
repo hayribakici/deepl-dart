@@ -18,12 +18,11 @@ class Documents extends DeepLEndpoint {
     var filename = options.filename;
     var extension = filename.split('.').last;
     if (!supportedFileTypes.contains(extension)) {
-      throw ArgumentError(
-          'File is unsupported file type. Allowed: ${supportedFileTypes.join(',')}');
+      throw ArgumentError('Unsupported file type.\n'
+          'Allowed: ${supportedFileTypes.join(',')}');
     }
     var json =
         options.toJson().map((key, value) => MapEntry(key, value.toString()));
-    print(json);
     var result = await _api._postFormData(_path, filename, fields: json);
     return Document.fromJson(jsonDecode(result));
   }
@@ -46,7 +45,7 @@ class Documents extends DeepLEndpoint {
     var response = await _api._postRaw('$_path/${document.documentId}/result',
         jsonEncode({'document_key': document.documentKey}));
     var bytes = response.bodyBytes;
-    return File(filename).writeAsBytes(bytes);
+    return File(filename).writeAsBytes(bytes, flush: true);
   }
 
   /// Uploads, translates and downloads a document and returns
@@ -94,14 +93,12 @@ class Documents extends DeepLEndpoint {
       }
     }
     var done = (entry.value) as StatusDone;
-    var split = options.filename.split('/');
-    var path = split[split.length - 2];
-    var filenameExt = split.last.split('.');
-    var filename = filenameExt.first;
-    var ext = filenameExt.last;
+    var path = dirname(options.filename);
+    var filename = basenameWithoutExtension(options.filename);
+    var ext = extension(filename);
     var newFilename = '${filename}_${options.target.name}.$ext';
     var f = await downloadDocument(document, '$path/$newFilename');
-    done.file = f;
+    done.filename = join(f.absolute.path, basename(f.path));
     yield done;
   }
 }

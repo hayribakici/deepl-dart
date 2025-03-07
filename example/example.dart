@@ -24,8 +24,24 @@ void main(List<String> args) async {
       'Detected language: ${translation.detectedLanguage?.name}, translation: ${translation.text}');
   // await translateDocumentManual(deepl);
   // translateDocumentStream(deepl);
+  improveText(deepl);
 }
 
+Future<void> improveText(DeepLApi deepl) async {
+  var improved = await deepl.improvements.improveText(
+      options: TextImprovementRequestOptionsBuilder(
+              text: "I could relly use sum help with edits on this text !",
+              target: TargetLanguage.EN_US)
+          .build());
+
+  if (improved.isEmpty) {
+    print('Nothing to improve');
+    return;
+  }
+  print('Improved Text: ${improved.first}');
+}
+
+// "text":["I could relly use sum help with edits on this text !"],
 void translateDocumentStream(DeepLApi deepl) {
   var curr = Directory.current.path;
   deepl.documents
@@ -36,13 +52,13 @@ void translateDocumentStream(DeepLApi deepl) {
   ).build())
       .listen((event) {
     switch (event.runtimeType) {
-      case StatusQueued:
+      case StatusQueued _:
         print('Queued');
         break;
-      case StatusTranslating:
-        stdout.write('\r${(event as StatusTranslating).secondsRemaining}s');
+      case StatusTranslating t:
+        stdout.write('\r${t.secondsRemaining}s');
         break;
-      case StatusDone:
+      case StatusDone _:
         print('Downloading Document');
         print('Done');
     }

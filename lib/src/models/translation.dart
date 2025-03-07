@@ -24,24 +24,21 @@ class Translation {
 }
 
 /// Base class for emitting translations
-abstract class TranslateRequestOptions<T extends TranslateRequestBuilder> {
+abstract class TranslateRequestOptions<T extends TranslateRequestBuilder>
+    extends BaseRequestOptions<T> {
   TranslateRequestOptions();
 
   @JsonKey(name: 'source_lang', includeIfNull: false)
   SourceLanguage? source;
 
-  @JsonKey(name: 'target_lang')
-  late TargetLanguage target;
-
   @JsonKey(name: 'formality')
-  Formality formality = Formality.def;
+  Formality formality = Formality.defaultFormality;
 
   @JsonKey(name: 'glossary_id', includeIfNull: false)
   String? glossaryId;
 
-  TranslateRequestOptions._builder(T builder) {
+  TranslateRequestOptions._builder(T builder) : super._builder(builder) {
     source = builder.source;
-    target = builder.target;
     formality = builder.formality;
     glossaryId = builder.glossaryId;
   }
@@ -78,17 +75,13 @@ final class TranslateTextRequestOptions
   }
 }
 
-abstract class TranslateRequestBuilder<T> {
-  TranslateRequestBuilder({required this.target});
+abstract class TranslateRequestBuilder<T> extends BaseRequestBuilder<T> {
+  TranslateRequestBuilder({required super.target});
 
   SourceLanguage? source;
 
-  TargetLanguage target;
-
-  Formality formality = Formality.def;
+  Formality formality = Formality.defaultFormality;
   String? glossaryId;
-
-  T build();
 }
 
 /// Builder class for [TranslateTextRequestOptions]
@@ -171,7 +164,7 @@ enum SplitSentenceOption {
 enum Formality {
   /// Default formality
   @JsonValue('default')
-  def,
+  defaultFormality,
 
   /// more
   @JsonValue('more')
@@ -210,7 +203,7 @@ enum SupportetFileTypes {
   html,
 
   /// Plain Text
-  txt, // - Plain Text Document
+  txt,
 
   /// xliff - XLIFF Document, version 2.1
   xlf,

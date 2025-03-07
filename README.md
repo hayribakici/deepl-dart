@@ -87,9 +87,10 @@ var curr = Directory.current.path;
 ### Supported endpoints
 
 - [x] Translating documents (`deepl.documents`)
-  - [x] Pploading files
+  - [x] Uploading files
   - [x] Checking file status
   - [x] Downloading document
 - [x] Translating text (`deepl.translate`)
 - [x] Glossaries (`deepl.glossaries`)
 - [x] Tranlation quota (`deepl.quota`)
+- [x] Text improvement (`deepl.improveText`) ([only available for Pro customers](https://developers.deepl.com/docs/api-reference/improve-text))

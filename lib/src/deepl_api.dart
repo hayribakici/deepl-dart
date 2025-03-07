@@ -14,6 +14,7 @@ abstract class DeepLApi {
   late Glossaries _glossary;
   late Languages _languages;
   late Quotas _quotas;
+  late TextImprovements _improvements;
 
   DeepLApi(String key, {BaseClient? client}) {
     _key = key;
@@ -24,6 +25,7 @@ abstract class DeepLApi {
     _translations = Translations(this);
     _languages = Languages(this);
     _quotas = Quotas(this);
+    _improvements = TextImprovements(this);
   }
 
   /// Create an instance with a given [key] and optional [client].
@@ -60,7 +62,6 @@ abstract class DeepLApi {
     _handleResponse(response, () async => utf8.decode(response.bodyBytes));
   }
 
-  // ignore: unused_element
   Future<String> _postFormData(String path, String filename,
       {Map<String, String>? headers, Map<String, String>? fields}) async {
     var field = filename.split('/').last;
@@ -69,10 +70,9 @@ abstract class DeepLApi {
           ..headers.addAll(_buildBaseRequestHeader(headers))
           ..fields.addAll(fields ?? {})
           ..files.add(MultipartFile.fromBytes(
-              field, File(filename).readAsBytesSync(),
+              field, await File(filename).readAsBytes(),
               filename: field));
     var response = await request.send();
-    // return await response.stream.bytesToString();
     return _handleResponse(
         response, () async => await response.stream.bytesToString());
   }
@@ -121,10 +121,12 @@ abstract class DeepLApi {
 
   /// Endpoint regarding the quotas
   Quotas get quota => _quotas;
+
+  /// Endpoint regarding text improvements
+  TextImprovements get improvements => _improvements;
 }
 
 class _DeepLFreeApi extends DeepLApi {
-  // _DeepLFreeApi(super.key, {super.client});
   _DeepLFreeApi(super.key, {super.client}) : super();
 
   @override
